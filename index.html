@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Бюджет</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* Стили для кастомной прокрутки */
+        .slider-container::-webkit-scrollbar {
+            height: 4px;
+        }
+        .slider-container::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 2px;
+        }
+        .dark .slider-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .slider-item {
+            flex: 0 0 280px; /* Фиксированная ширина карточки */
+            scroll-snap-align: start;
+        }
+        
+        @media (min-width: 640px) {
+            .slider-item {
+                flex: 0 0 320px; /* Чуть шире на sm экранах */
+            }
+        }
+        
+        /* Плавное появление */
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Кастомный Toast (уведомление) */
+        #toast-notification {
+            transition: all 0.5s ease;
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        #toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Стили для выбора логотипа банка */
+        .bank-logo {
+            width: 70px;
+            height: 50px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: white;
+            padding: 4px;
+        }
+        .bank-logo.selected {
+            border-color: #3b82f6; /* blue-500 */
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        .bank-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        /* Fallback стиль, если лого не загрузится */
+        .bank-logo.logo-fallback {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4b5563; /* gray-600 */
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        .logo-fallback {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #374151; /* gray-700 */
+        }
+
+        /* Стили для выбора цвета */
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .color-swatch.selected {
+            border-color: #3b82f6; /* blue-500 */
+            transform: scale(1.1);
+        }
+    </style>
+    <script>
+        // Управление темной темой (АВТОМАТИЧЕСКОЕ)
+        const applyTheme = () => {
+            // Удаляем старые классы на всякий случай
+            document.documentElement.classList.remove('dark', 'light');
+            
+            // Проверяем localStorage ИЛИ системные настройки
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                // localStorage.theme === 'light' ИЛИ нет 'theme' и система светлая
+                document.documentElement.classList.add('light');
+            }
+        };
+
+        // Применяем тему сразу при загрузке
+        applyTheme();
+    </script>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen font-sans">
+
+    <!-- 
+      НОВЫЙ БЛОК: ЭКРАН АВТОРИЗАЦИИ
+      (Показывается по умолчанию, скрывается после входа)
+    -->
+    <div id="auth-container" class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">Мой Бюджет</h2>
+            
+            <!-- Табы Вход/Регистрация -->
+            <div class="flex mb-6 border-b border-gray-200 dark:border-gray-700">
+                <button id="auth-tab-login" class="flex-1 py-3 font-semibold text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400">
+                    Вход
+                </button>
+                <button id="auth-tab-register" class="flex-1 py-3 font-semibold text-gray-500 dark:text-gray-400">
+                    Регистрация
+                </button>
+            </div>
+
+            <!-- Форма Входа -->
+            <form id="auth-form-login">
+                <div class="mb-4">
+                    <label for="login-email" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Email</label>
+                    <input type="email" id="login-email" placeholder="email@example.com" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                </div>
+                <div class="mb-6">
+                    <label for="login-password" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Пароль</label>
+                    <input type="password" id="login-password" placeholder="••••••••" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">
+                    Войти
+                </button>
+            </form>
+
+            <!-- Форма Регистрации (скрыта) -->
+            <form id="auth-form-register" class="hidden">
+                <div class="mb-4">
+                    <label for="register-email" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Email</label>
+                    <input type="email" id="register-email" placeholder="email@example.com" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                </div>
+                <div class="mb-6">
+                    <label for="register-password" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Пароль</slabel>
+                    <input type="password" id="register-password" placeholder="Мин. 6 символов" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">
+                    Создать аккаунт
+                </button>
+            </form>
+            
+            <p id="auth-error" class="text-center text-red-500 text-sm mt-4"></p>
+        </div>
+    </div>
+
+
+    <!-- 
+      ОСНОВНОЕ ПРИЛОЖЕНИЕ
+      (Скрыто по умолчанию, показывается после входа)
+    -->
+    <div id="main-app" class="hidden">
+
+        <!-- 
+          МОДАЛЬНЫЕ ОКНА (изначально скрыты)
+        -->
+
+        <!-- 1. Модальное окно: Новая транзакция -->
+        <div id="transaction-modal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex justify-center items-end sm:items-center p-4 z-50 hidden fade-in">
+            <div class="bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl shadow-xl w-full max-w-lg p-6 relative">
+                <button id="close-transaction-modal" class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
+                <h3 id="transaction-modal-title" class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">Новая транзакция</h3>
+                
+                <form id="transaction-form">
+                    <!-- Описание -->
+                    <div class="mb-4">
+                        <label for="transaction-description" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Описание</label>
+                        <input type="text" id="transaction-description" placeholder="Напр., Покупка в Magnum" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    </div>
+                    
+                    <!-- Сумма -->
+                    <div class="mb-4">
+                        <label for="transaction-amount" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Сумма (₸)</label>
+                        <input type="number" id="transaction-amount" placeholder="0" step="0.01" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    </div>
+                    
+                    <!-- Выбор счета (Откуда) -->
+                    <div class="mb-4">
+                        <label for="transaction-account" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Счет</label>
+                        <select id="transaction-account" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none" required>
+                            <!-- Опции для счетов будут добавлены JS -->
+                        </select>
+                    </div>
+
+                    <!-- Категория (ДИНАМИЧЕСКАЯ) -->
+                    <div id="category-container" class="mb-4">
+                        <label for="transaction-category" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Категория</label>
+                        <select id="transaction-category" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
+                            <!-- Опции для категорий будут добавлены JS -->
+                        </select>
+                    </div>
+
+                    <!-- Выбор кредита (для оплаты) -->
+                    <div id="loan-payment-container" class="mb-4 hidden">
+                        <label for="transaction-loan-select" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Какой кредит оплачиваете?</label>
+                        <select id="transaction-loan-select" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
+                            <!-- Опции для кредитов будут добавлены JS -->
+                        </select>
+                    </div>
+                    
+                    <!-- Выбор счета для сбережений (Перевод) -->
+                    <div id="savings-transfer-container" class="mb-4 hidden">
+                        <label for="transaction-savings-select" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">На какой сберегательный счет?</label>
+                        <select id="transaction-savings-select" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
+                            <!-- Опции для сбережений будут добавлены JS -->
+                        </select>
+                    </div>
+
+                    <input type="hidden" id="transaction-type">
+                    
+                    <button type="submit" id="submit-transaction-btn" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all">
+                        Добавить
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. Модальное окно: Новый счет -->
+        <div id="account-modal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex justify-center items-end sm:items-center p-4 z-50 hidden fade-in">
+            <div class="bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl shadow-xl w-full max-w-lg p-6 relative overflow-y-auto max-h-[90vh]">
+                <button id="close-account-modal" class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
+                <h3 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">Новый счет</h3>
+                
+                <form id="account-form">
+                    <!-- Тип счета -->
+                    <div class="mb-4">
+                        <label for="account-type" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Тип счета</label>
+                        <select id="account-type" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
+                            <option value="bank">Банк</option>
+                            <option value="deposit">Депозит</option>
+                            <option value="savings">Сбережение</option>
+                            <option value="cash">Наличный</option>
+                        </select>
+                    </div>
+
+                    <!-- Выбор банка (появляется если тип "Банк") -->
+                    <div id="bank-logo-container" class="mb-4">
+                         <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Выберите банк</label>
+                         <div class="grid grid-cols-3 gap-3 justify-center">
+                            <div class="bank-logo" data-bank-name="Kaspi Bank" data-bank-logo-url="https://kaspi.kz/img/Logo.svg">
+                                <img src="https://kaspi.kz/img/Logo.svg" alt="Kaspi Bank" onerror="this.parentElement.innerHTML = 'K'; this.parentElement.classList.add('logo-fallback');">
+                            </div>
+                            <div class="bank-logo" data-bank-name="Halyk Bank" data-bank-logo-url="https://halykbank.kz/storage/app/uploads/public/652/cf7/01b/652cf701be5b8939869157.svg">
+                                <img src="https://halykbank.kz/storage/app/uploads/public/652/cf7/01b/652cf701be5b8939869157.svg" alt="Halyk Bank" onerror="this.parentElement.innerHTML = 'H'; this.parentElement.classList.add('logo-fallback');">
+                            </div>
+                            <div class="bank-logo" data-bank-name="ForteBank" data-bank-logo-url="https://forte.kz/_next/image?url=https%3A%2F%2Fmain.storage-object.pscloud.io%2FFrame_2087330514_20281c4df7.svg&w=768&q=85">
+                                 <img src="https://forte.kz/_next/image?url=https%3A%2F%2Fmain.storage-object.pscloud.io%2FFrame_2087330514_20281c4df7.svg&w=768&q=85" alt="ForteBank" onerror="this.parentElement.innerHTML = 'F'; this.parentElement.classList.add('logo-fallback');">
+                            </div>
+                            <div class="bank-logo" data-bank-name="CenterCredit" data-bank-logo-url="https://www.bcc.kz/themes/bcc/assets/images/logo.svg">
+                                <img src="https://www.bcc.kz/themes/bcc/assets/images/logo.svg" alt="CenterCredit" onerror="this.parentElement.innerHTML = 'B'; this.parentElement.classList.add('logo-fallback');">
+                            </div>
+                         </div>
+                         <input type="hidden" id="account-logo-url">
+                    </div>
+
+                    <!-- Название счета -->
+                    <div class="mb-4">
+                        <label for="account-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Название</label>
+                        <input type="text" id="account-name" placeholder="Напр., Kaspi Bank" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    </div>
+
+                    <!-- Начальный баланс -->
+                    <div class="mb-4">
+                        <label for="account-balance" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Текущий баланс (₸)</label>
+                        <input type="number" id="account-balance" placeholder="0" step="0.01" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    </div>
+                    
+                    <!-- Выбор цвета -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Цвет карты</label>
+                        <div id="color-picker" class="flex flex-wrap gap-3 justify-center">
+                            <div class="color-swatch selected" data-color="from-blue-500 to-blue-700" style="background: linear-gradient(to right, #3b82f6, #1d4ed8);"></div>
+                            <div class="color-swatch" data-color="from-green-500 to-green-700" style="background: linear-gradient(to right, #22c55e, #15803d);"></div>
+                            <div class="color-swatch" data-color="from-purple-500 to-purple-700" style="background: linear-gradient(to right, #a855f7, #7e22ce);"></div>
+                            <div class="color-swatch" data-color="from-red-500 to-red-700" style="background: linear-gradient(to right, #ef4444, #b91c1c);"></div>
+                            <div class="color-swatch" data-color="from-yellow-500 to-yellow-700" style="background: linear-gradient(to right, #eab308, #a16207);"></div>
+                            <div class="color-swatch" data-color="from-cyan-500 to-cyan-700" style="background: linear-gradient(to right, #06b6d4, #0e7490);"></div>
+                            <div class="color-swatch" data-color="from-pink-500 to-pink-700" style="background: linear-gradient(to right, #ec4899, #be185d);"></div>
+                            <div class="color-swatch" data-color="from-indigo-500 to-indigo-700" style="background: linear-gradient(to right, #6366f1, #4338ca);"></div>
+                            <div class="color-swatch" data-color="from-gray-700 to-gray-900" style="background: linear-gradient(to right, #374151, #111827);"></div>
+                            <div class="color-swatch" data-color="from-orange-500 to-orange-700" style="background: linear-gradient(to right, #f97316, #c2410c);"></div>
+                        </div>
+                        <input type="hidden" id="account-color" value="from-blue-500 to-blue-700">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">
+                        Добавить счет
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 3. Модальное окно: Новый кредит -->
+        <div id="loan-modal" class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex justify-center items-end sm:items-center p-4 z-50 hidden fade-in">
+            <div class="bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl shadow-xl w-full max-w-lg p-6 relative">
+                <button id="close-loan-modal" class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
+                <h3 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">Новый кредит</h3>
+                
+                <form id="loan-form">
+                    <!-- Название -->
+                    <div class="mb-4">
+                        <label for="loan-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Название</label>
+                        <input type="text" id="loan-name" placeholder="Напр., Автокредит" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    </div>
+                    <!-- Общая сумма -->
+                    <div class="mb-4">
+                        <label for="loan-total-amount" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Общая сумма (₸)</label>
+                        <input type="number" id="loan-total-amount" placeholder="5000000" step="1000" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    </div>
+                    <!-- Уже оплачено -->
+                    <div class="mb-4">
+                        <label for="loan-paid-amount" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Уже оплачено (₸)</label>
+                        <input type="number" id="loan-paid-amount" placeholder="0" step="1000" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    </div>
+                    <!-- Ежемесячный платеж -->
+                    <div class="mb-4">
+                        <label for="loan-monthly-payment" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Ежемесячный платеж (₸)</label>
+                        <input type="number" id="loan-monthly-payment" placeholder="50000" step="100" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    </div>
+                    <!-- Дата платежа -->
+                    <div class="mb-4">
+                        <label for="loan-payment-date" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Число ежемесячного платежа</label>
+                        <input type="number" id="loan-payment-date" placeholder="15" min="1" max="31" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">
+                        Добавить кредит
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 4. Модальное окно: Вся история -->
+        <div id="history-modal" class="fixed inset-0 bg-gray-100 dark:bg-gray-900 z-50 hidden overflow-y-auto fade-in">
+            <div class="w-full max-w-4xl mx-auto p-4 sm:p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Вся история</h2>
+                    <button id="close-history-modal" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+                        <i class="fas fa-times fa-2x"></i>
+                    </button>
+                </div>
+                <div id="all-history-content" class="space-y-6">
+                    <!-- Контент будет добавлен JS -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 
+          Боковая панель (Drawer)
+        -->
+        <div id="drawer-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden transition-opacity duration-300"></div>
+        <div id="drawer-content" class="fixed top-0 left-0 h-full w-80 max-w-[80%] bg-white dark:bg-gray-800 shadow-2xl z-40 transform -translate-x-full transition-transform duration-300 p-6 overflow-y-auto flex flex-col">
+            <div class="flex-grow">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Настройки</h2>
+            
+                <!-- Блок Модели бюджета -->
+                <div>
+                    <label for="budget-model-select" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Модель Управления</label>
+                    <select id="budget-model-select" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
+                        <option value="none">Не выбрана</option>
+                        <option value="50-30-20">50 / 30 / 20</option>
+                        <option value="80-20">80 / 20 (Накопление)</option>
+                    </select>
+                    
+                    <div id="model-display" class="mt-6 space-y-3">
+                        <p class="text-gray-500 dark:text-gray-400">Выберите модель, чтобы увидеть распределение.</p>
+                    </div>
+                </div>
+                
+                <hr class="my-6 dark:border-gray-600">
+                
+                <div class="text-left text-xs text-gray-400">
+                    Вы вошли как: <br> <strong id="user-email-display" class="font-mono text-sm break-words">...</strong>
+                </div>
+            </div>
+            
+            <!-- Кнопка Выхода -->
+            <div class="mt-6">
+                <button id="logout-button" class="w-full flex items-center justify-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="font-semibold">Выйти</span>
+                </button>
+            </div>
+        </div>
+
+
+        <!-- 
+          Основной контент страницы
+        -->
+        <div class="w-full max-w-4xl mx-auto p-4 sm:p-6">
+            
+            <!-- Шапка -->
+            <header class="flex justify-between items-center mb-6">
+                <button id="menu-toggle" class="text-gray-700 dark:text-gray-300 text-2xl p-2 -ml-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Мой Бюджет</h1>
+                <div class="w-8"></div> <!-- Заглушка для баланса -->
+            </header>
+
+            <!-- Адаптивная сетка -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- Левая колонка (Балансы и Слайдеры) -->
+                <div class="space-y-6">
+                    
+                    <!-- Балансы -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Общий Баланс -->
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
+                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Общий баланс</span>
+                            <p id="total-balance" class="text-2xl font-bold text-gray-900 dark:text-white truncate">0 ₸</p>
+                        </div>
+                        <!-- Сбережения -->
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
+                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Сбережения</span>
+                            <p id="savings-balance" class="text-2xl font-bold text-green-600 dark:text-green-500 truncate">0 ₸</p>
+                        </div>
+                    </div>
+
+                    <!-- Модель бюджета на главном -->
+                    <div id="main-model-display" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md">
+                         <p class="text-center text-gray-500 dark:text-gray-400">Выберите модель бюджета в настройках</p>
+                    </div>
+                    
+                    <!-- КНОПКИ Доход/Расход -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <button id="nav-income" class="flex items-center justify-center gap-2 bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 p-4 rounded-2xl shadow-md hover:bg-green-200 dark:hover:bg-green-700 transition-all">
+                            <i class="fas fa-plus-circle fa-lg"></i>
+                            <span class="text-lg font-semibold">Доход</span>
+                        </button>
+                        <button id="nav-expense" class="flex items-center justify-center gap-2 bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-300 p-4 rounded-2xl shadow-md hover:bg-red-200 dark:hover:bg-red-700 transition-all">
+                            <i class="fas fa-minus-circle fa-lg"></i>
+                            <span class="text-lg font-semibold">Расход</span>
+                        </button>
+                    </div>
+
+                    <!-- Слайдер Счетов -->
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Счета</h2>
+                            <button id="add-account-btn" class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline">
+                                + Новый счет
+                            </button>
+                        </div>
+                        <div id="accounts-slider" class="slider-container flex overflow-x-auto gap-4 py-2 scroll-snap-x-mandatory">
+                            <!-- Карточки счетов будут добавлены JS -->
+                            <div id="no-accounts" class="text-center text-gray-500 dark:text-gray-400 w-full p-10">
+                                У вас пока нет счетов.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Слайдер Кредитов -->
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Кредиты</h2>
+                            <button id="add-loan-btn" class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline">
+                                + Новый кредит
+                            </button>
+                        </div>
+                        <div id="loans-slider" class="slider-container flex overflow-x-auto gap-4 py-2 scroll-snap-x-mandatory">
+                            <!-- Карточки кредитов будут добавлены JS -->
+                            <div id="no-loans" class="text-center text-gray-500 dark:text-gray-400 w-full p-10">
+                                У вас нет активных кредитов.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Статус по кредитам -->
+                    <div id="loan-status-widget" class="space-y-3">
+                        <!-- Статус будет добавлен JS -->
+                    </div>
+
+                </div> <!-- Конец левой колонки -->
+
+                <!-- Правая колонка (История) -->
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">История (Сегодня)</h2>
+                        <button id="show-all-history-btn" class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline">
+                            Все <i class="fas fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                    <div id="history-list" class="space-y-3">
+                        <div id="no-history" class="text-center text-gray-500 dark:text-gray-400 p-10 bg-white dark:bg-gray-800 rounded-2xl shadow-md">
+                            Сегодня операций не было.
+                        </div>
+                        <!-- Список транзакций будет добавлен JS -->
+                    </div>
+                </div> <!-- Конец правой колонки -->
+            
+            </div> <!-- Конец адаптивной сетки -->
+
+        </div> <!-- Конец основного контента -->
+
+    </div> <!-- Конец #main-app -->
+
+
+    <!-- 
+      Кастомное Toast уведомление
+    -->
+    <div id="toast-notification" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-96 p-4 rounded-lg shadow-lg z-50 transition-all duration-500">
+        <p id="toast-message" class="font-semibold text-white">Сообщение</p>
+    </div>
+
+
+    <!-- 
+      СКРИПТЫ
+    -->
+    
+    <!-- Firebase -->
+    <script type="module">
+        // Импорты Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // --- ИЗМЕНЕНО: ИМПОРТЫ REALTIME DATABASE ---
+        import {
+            getDatabase,
+            ref,
+            onValue,
+            set,
+            push,
+            remove,
+            runTransaction,
+            serverTimestamp,
+            query as dbQuery, // Переименовываем, чтобы не конфликтовать с query Firestore (хотя мы его удалили)
+            orderByChild,
+            equalTo
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+        // --- 0. КОНФИГУРАЦИЯ FIREBASE (ВАЖНО!) ---
+        
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!                                              !!
+        // !!  ШАГ 1: ВСТАВЬ СЮДА СВОЙ firebaseConfig       !!
+        // !!                                              !!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoYzo2ntwZ_nbnzh5f967tmR8f31Y-dPc",
+            authDomain: "budgetapp-a5883.firebaseapp.com",
+            databaseURL: "https://budgetapp-a5883-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "budgetapp-a5883",
+            storageBucket: "budgetapp-a5883.firebasestorage.app",
+            messagingSenderId: "839768191708",
+            appId: "1:839768191708:web:3e901d3f4656f80faaba19",
+            measurementId: "G-N2M6D4FMZ6"
+        };
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+        // --- Инициализация ---
+        let app, auth, db; // db теперь это Realtime Database
+        let currentUserId = null;
+        
+        // Глобальные состояния
+        let allTransactions = [];
+        let allAccounts = [];
+        let allLoans = [];
+        let currentBudgetModel = 'none';
+        
+        // Ссылки на слушатели RTDB (чтобы их можно было отключать)
+        let accountsListener = null;
+        let loansListener = null;
+        let transactionsListener = null;
+
+        // Форматтер валют
+        const formatter = new Intl.NumberFormat('kk-KZ', { 
+            style: 'currency', 
+            currency: 'KZT',
+            currencyDisplay: 'narrowSymbol',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        });
+        
+        // Элементы DOM
+        const authContainer = document.getElementById('auth-container');
+        const mainAppContainer = document.getElementById('main-app');
+        
+        // Элементы Auth
+        const authTabLogin = document.getElementById('auth-tab-login');
+        const authTabRegister = document.getElementById('auth-tab-register');
+        const authFormLogin = document.getElementById('auth-form-login');
+        const authFormRegister = document.getElementById('auth-form-register');
+        const authError = document.getElementById('auth-error');
+        const logoutButton = document.getElementById('logout-button');
+        
+        // ... (все остальные элементы DOM, как и раньше)
+        const totalBalanceEl = document.getElementById('total-balance');
+        const savingsBalanceEl = document.getElementById('savings-balance');
+        const accountsSlider = document.getElementById('accounts-slider');
+        const loansSlider = document.getElementById('loans-slider');
+        const historyList = document.getElementById('history-list');
+        const noAccountsEl = document.getElementById('no-accounts');
+        const noLoansEl = document.getElementById('no-loans');
+        const noHistoryEl = document.getElementById('no-history');
+        const loanStatusWidget = document.getElementById('loan-status-widget');
+        const budgetModelSelect = document.getElementById('budget-model-select');
+        const drawerModelDisplay = document.getElementById('model-display');
+        const mainModelDisplay = document.getElementById('main-model-display'); 
+        const navIncome = document.getElementById('nav-income');
+        const navExpense = document.getElementById('nav-expense');
+        const transactionModal = document.getElementById('transaction-modal');
+        const closeTransactionModal = document.getElementById('close-transaction-modal');
+        const transactionModalTitle = document.getElementById('transaction-modal-title');
+        const transactionForm = document.getElementById('transaction-form');
+        const transactionCategory = document.getElementById('transaction-category');
+        const loanPaymentContainer = document.getElementById('loan-payment-container');
+        const transactionLoanSelect = document.getElementById('transaction-loan-select');
+        const savingsTransferContainer = document.getElementById('savings-transfer-container');
+        const transactionSavingsSelect = document.getElementById('transaction-savings-select');
+        const submitTransactionBtn = document.getElementById('submit-transaction-btn');
+        const transactionAccountSelect = document.getElementById('transaction-account');
+        const transactionDescriptionInput = document.getElementById('transaction-description');
+        const transactionAmountInput = document.getElementById('transaction-amount');
+        const accountModal = document.getElementById('account-modal');
+        const addAccountBtn = document.getElementById('add-account-btn');
+        const closeAccountModal = document.getElementById('close-account-modal');
+        const accountForm = document.getElementById('account-form');
+        const accountTypeSelect = document.getElementById('account-type');
+        const bankLogoContainer = document.getElementById('bank-logo-container');
+        const bankLogoInputs = document.querySelectorAll('.bank-logo');
+        const accountLogoUrlInput = document.getElementById('account-logo-url');
+        const accountNameInput = document.getElementById('account-name');
+        const colorPicker = document.getElementById('color-picker');
+        const colorSwatches = document.querySelectorAll('.color-swatch');
+        const accountColorInput = document.getElementById('account-color');
+        const loanModal = document.getElementById('loan-modal');
+        const addLoanBtn = document.getElementById('add-loan-btn');
+        const closeLoanModal = document.getElementById('close-loan-modal');
+        const loanForm = document.getElementById('loan-form');
+        const menuToggle = document.getElementById('menu-toggle');
+        const drawerBackdrop = document.getElementById('drawer-backdrop');
+        const drawerContent = document.getElementById('drawer-content');
+        const toast = document.getElementById('toast-notification');
+        const toastMessage = document.getElementById('toast-message');
+        const showAllHistoryBtn = document.getElementById('show-all-history-btn');
+        const historyModal = document.getElementById('history-modal');
+        const closeHistoryModal = document.getElementById('close-history-modal');
+        const allHistoryContent = document.getElementById('all-history-content');
+        
+        // --- 1. Инициализация Firebase и Аутентификация ---
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Инициализируем Firebase с ТВОИМ конфигом
+                app = initializeApp(firebaseConfig);
+                db = getDatabase(app); // --- ИЗМЕНЕНО ---
+                auth = getAuth(app);
+                
+                // setLogLevel('debug'); // Недоступно для RTDB
+
+                // --- НОВЫЕ СЛУШАТЕЛИ AUTH ---
+                authTabLogin.addEventListener('click', () => toggleAuthTabs(true));
+                authTabRegister.addEventListener('click', () => toggleAuthTabs(false));
+                authFormLogin.addEventListener('submit', handleLogin);
+                authFormRegister.addEventListener('submit', handleRegister);
+                logoutButton.addEventListener('click', handleLogout);
+
+                // --- Старые слушатели ---
+                menuToggle.addEventListener('click', () => toggleDrawer(true));
+                drawerBackdrop.addEventListener('click', () => toggleDrawer(false));
+                navIncome.addEventListener('click', () => openTransactionModal('income'));
+                navExpense.addEventListener('click', () => openTransactionModal('expense'));
+                addAccountBtn.addEventListener('click', () => toggleModal('account-modal', true));
+                closeAccountModal.addEventListener('click', () => toggleModal('account-modal', false));
+                accountForm.addEventListener('submit', handleAccountSubmit);
+                addLoanBtn.addEventListener('click', () => toggleModal('loan-modal', true));
+                closeLoanModal.addEventListener('click', () => toggleModal('loan-modal', false));
+                loanForm.addEventListener('submit', handleLoanSubmit);
+                closeTransactionModal.addEventListener('click', () => toggleModal('transaction-modal', false));
+                transactionForm.addEventListener('submit', handleTransactionSubmit);
+                showAllHistoryBtn.addEventListener('click', () => toggleModal('history-modal', true));
+                closeHistoryModal.addEventListener('click', () => toggleModal('history-modal', false));
+                setupAccountModalUI();
+                transactionCategory.addEventListener('change', handleCategoryChange);
+                budgetModelSelect.addEventListener('change', renderBudgetModels);
+
+                // Запускаем главный процесс аутентификации
+                setupAuthListener();
+
+            } catch (error) {
+                console.error("Ошибка инициализации Firebase:", error);
+                authError.textContent = "Ошибка инициализации Firebase. Твой 'firebaseConfig' указан верно?";
+                authContainer.classList.remove('hidden'); // Показать экран входа, чтобы была видна ошибка
+            }
+        });
+        
+        // ГЛАВНЫЙ СЛУШАТЕЛЬ AUTH
+        function setupAuthListener() {
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    // Пользователь вошел
+                    currentUserId = user.uid;
+                    document.getElementById('user-email-display').textContent = user.email;
+                    
+                    // Показываем приложение, скрываем Auth
+                    authContainer.classList.add('hidden');
+                    mainAppContainer.classList.remove('hidden');
+                    
+                    // Запускаем загрузку данных
+                    await initializeDataListeners();
+                } else {
+                    // Пользователь не вошел (или нажал "Выйти")
+                    currentUserId = null;
+                    
+                    // Показываем Auth, скрываем приложение
+                    authContainer.classList.remove('hidden');
+                    mainAppContainer.classList.add('hidden');
+                    
+                    // ОЧИЩАЕМ все данные с экрана
+                    clearAllLocalData();
+                }
+            });
+        }
+        
+        // --- 2. Загрузка данных (Listeners) ---
+        
+        // --- ИЗМЕНЕНО: ЛОГИКА REALTIME DATABASE ---
+        
+        async function initializeDataListeners() {
+            if (!currentUserId) return;
+            
+            // Отключаем старые слушатели, если они есть
+            if (accountsListener) accountsListener();
+            if (loansListener) loansListener();
+            if (transactionsListener) transactionsListener();
+
+            // 1. Слушатель Счетов
+            const accountsRef = ref(db, `users/${currentUserId}/accounts`);
+            accountsListener = onValue(accountsRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                allAccounts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                allAccounts.sort((a, b) => a.createdAt - b.createdAt); // Сортируем по дате создания
+                renderAccounts();
+                updateBalances();
+                populateAccountSelect();
+            }, (error) => console.error("Ошибка загрузки счетов:", error));
+
+            // 2. Слушатель Кредитов
+            const loansRef = ref(db, `users/${currentUserId}/loans`);
+            loansListener = onValue(loansRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                allLoans = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                allLoans.sort((a, b) => a.paymentDate - b.paymentDate); // Сортируем по дате платежа
+                renderLoans();
+                renderLoanStatus();
+            }, (error) => console.error("Ошибка загрузки кредитов:", error));
+
+            // 3. Слушатель Транзакций
+            const transRef = ref(db, `users/${currentUserId}/transactions`);
+            transactionsListener = onValue(transRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                allTransactions = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                // Сортируем: новые вверху
+                allTransactions.sort((a, b) => b.createdAt - a.createdAt);
+                
+                renderHistory(); // Рендер "Сегодня"
+                renderAllHistory(); // Рендер "Всей истории" в модалке
+                updateBalances(); // Обновляем балансы
+                renderBudgetModels(); // Обновляем модели
+                renderLoanStatus(); // Обновляем статус кредитов
+            }, (error) => console.error("Ошибка загрузки транзакций:", error));
+        }
+        
+        // НОВАЯ ФУНКЦИЯ: Очистка данных при выходе
+        function clearAllLocalData() {
+            // Отключаем слушатели
+            if (accountsListener) accountsListener();
+            if (loansListener) loansListener();
+            if (transactionsListener) transactionsListener();
+            
+            accountsListener = null;
+            loansListener = null;
+            transactionsListener = null;
+
+            allTransactions = [];
+            allAccounts = [];
+            allLoans = [];
+            
+            renderAccounts();
+            renderLoans();
+            renderHistory();
+            renderAllHistory();
+            updateBalances();
+            renderBudgetModels();
+            renderLoanStatus();
+            
+            // Сбрасываем drawer
+            drawerModelDisplay.innerHTML = '<p class="text-gray-500 dark:text-gray-400">Выберите модель, чтобы увидеть распределение.</p>';
+            budgetModelSelect.value = 'none';
+        }
+
+
+        // --- 3. Функции UI (Вспомогательные) ---
+        
+        function toggleModal(modalId, show) {
+            const modal = document.getElementById(modalId);
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+        
+        function toggleDrawer(show) {
+            if (show) {
+                drawerBackdrop.classList.remove('hidden');
+                drawerBackdrop.style.opacity = '1';
+                drawerContent.classList.remove('-translate-x-full');
+            } else {
+                drawerBackdrop.style.opacity = '0';
+                drawerContent.classList.add('-translate-x-full');
+                setTimeout(() => drawerBackdrop.classList.add('hidden'), 300);
+            }
+        }
+
+        function showToast(message, isError = false) {
+            toastMessage.textContent = message;
+            toast.className = `fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-96 p-4 rounded-lg shadow-lg z-50 transition-all duration-500 show ${isError ? 'bg-red-500' : 'bg-green-500'}`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+        function toggleAuthTabs(showLogin) {
+            authError.textContent = ''; // Очищаем ошибки
+            if (showLogin) {
+                authTabLogin.classList.add('border-blue-600', 'dark:border-blue-400', 'text-blue-600', 'dark:text-blue-400');
+                authTabLogin.classList.remove('text-gray-500', 'dark:text-gray-400');
+                
+                authTabRegister.classList.remove('border-blue-600', 'dark:border-blue-400', 'text-blue-600', 'dark:text-blue-400');
+                authTabRegister.classList.add('text-gray-500', 'dark:text-gray-400');
+
+                authFormLogin.classList.remove('hidden');
+                authFormRegister.classList.add('hidden');
+            } else {
+                authTabLogin.classList.remove('border-blue-600', 'dark:border-blue-400', 'text-blue-600', 'dark:text-blue-400');
+                authTabLogin.classList.add('text-gray-500', 'dark:text-gray-400');
+                
+                authTabRegister.classList.add('border-blue-600', 'dark:border-blue-400', 'text-blue-600', 'dark:text-blue-400');
+                authTabRegister.classList.remove('text-gray-500', 'dark:text-gray-400');
+
+                authFormLogin.classList.add('hidden');
+                authFormRegister.classList.remove('hidden');
+            }
+        }
+
+        // --- 4. Логика обновления UI (без изменений, кроме createdAt.toDate()) ---
+
+        // Обновление Общих Балансов
+        function updateBalances() {
+            let total = 0;
+            let savings = 0;
+            allAccounts.forEach(acc => {
+                total += acc.balance;
+                if (acc.type === 'savings' || acc.type === 'deposit') {
+                    savings += acc.balance;
+                }
+            });
+            totalBalanceEl.textContent = formatter.format(total);
+            savingsBalanceEl.textContent = formatter.format(savings);
+        }
+
+        // Рендер Слайдера Счетов
+        function renderAccounts() {
+            if (allAccounts.length === 0) {
+                noAccountsEl.classList.remove('hidden');
+                accountsSlider.innerHTML = '';
+                accountsSlider.appendChild(noAccountsEl);
+                return;
+            }
+            noAccountsEl.classList.add('hidden');
+            accountsSlider.innerHTML = '';
+            allAccounts.forEach(account => {
+                const card = document.createElement('div');
+                const colorClass = account.color || 'from-gray-500 to-gray-700';
+                card.className = `slider-item bg-gradient-to-br ${colorClass} p-5 rounded-2xl shadow-lg text-white flex flex-col justify-between h-48 relative overflow-hidden`;
+                let logoHtml = '';
+                if (account.logoUrl) {
+                    logoHtml = `
+                        <div class="absolute top-4 left-4 w-10 h-10 bg-white rounded-full p-1 flex items-center justify-center shadow">
+                            <img src="${account.logoUrl}" alt="${account.name} logo" class="w-full h-full object-contain" 
+                                 onerror="this.parentElement.innerHTML = '${account.name.charAt(0)}'; this.parentElement.classList.add('logo-fallback');">
+                        </div>`;
+                }
+                const typeText = { bank: 'Банк', deposit: 'Депозит', savings: 'Сбережение', cash: 'Наличный' };
+                card.innerHTML = `
+                    ${logoHtml}
+                    <button class="delete-account-btn absolute top-2 right-2 w-7 h-7 bg-black bg-opacity-20 rounded-full text-white text-xs hover:bg-opacity-40 z-10">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="z-0">
+                        <span class="block text-sm font-medium opacity-80 ${account.logoUrl ? 'text-right' : ''}">${typeText[account.type] || 'Счет'}</span>
+                        <span class="block text-lg font-semibold truncate ${account.logoUrl ? 'text-right' : ''}">${account.name}</span>
+                    </div>
+                    <div class="z-0">
+                        <span class="block text-xs opacity-80">Баланс</span>
+                        <p class="text-3xl font-bold truncate">${formatter.format(account.balance)}</p>
+                    </div>
+                `;
+                card.querySelector('.delete-account-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    handleDeleteAccount(account.id);
+                });
+                accountsSlider.appendChild(card);
+            });
+        }
+        
+        // Рендер Слайдера Кредитов
+        function renderLoans() {
+            if (allLoans.length === 0) {
+                noLoansEl.classList.remove('hidden');
+                loansSlider.innerHTML = '';
+                loansSlider.appendChild(noLoansEl);
+                return;
+            }
+            noLoansEl.classList.add('hidden');
+            loansSlider.innerHTML = '';
+            allLoans.forEach(loan => {
+                const card = document.createElement('div');
+                const progress = (loan.paidAmount / loan.totalAmount) * 100;
+                const remainingAmount = loan.totalAmount - loan.paidAmount;
+                const remainingMonths = (loan.monthlyPayment > 0) ? Math.ceil(remainingAmount / loan.monthlyPayment) : 0;
+                const monthsText = (remainingMonths > 0) ? `${remainingMonths} мес. осталось` : 'Выплачено';
+                card.className = 'slider-item bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md flex flex-col justify-between h-60 relative';
+                card.innerHTML = `
+                    <button class="delete-loan-btn absolute top-2 right-2 w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-500 dark:text-gray-400 text-xs hover:bg-gray-200 dark:hover:bg-gray-600 z-10">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div>
+                        <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Кредит</span>
+                        <span class="block text-lg font-semibold truncate text-gray-900 dark:text-white">${loan.name}</span>
+                        <span class="block text-sm font-medium text-gray-500 dark:text-gray-400 mt-1">
+                            Платеж до ${loan.paymentDate} числа
+                        </span>
+                    </div>
+                    <div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: ${progress}%"></div>
+                        </div>
+                        <div class="flex justify-between text-sm mb-2">
+                            <span class="text-gray-600 dark:text-gray-300">Оплачено</span>
+                            <span class="font-semibold text-gray-900 dark:text-white">${formatter.format(loan.paidAmount)}</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                            <span>Всего</span>
+                            <span>${formatter.format(loan.totalAmount)}</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t dark:border-gray-700">
+                        <span class="text-sm text-gray-600 dark:text-gray-300">Ежемес. платеж: <br> <strong class="text-base text-gray-900 dark:text-white">${formatter.format(loan.monthlyPayment)}</strong></span>
+                        <span class="text-sm font-semibold text-blue-600 dark:text-blue-400">${monthsText}</span>
+                    </div>
+                `;
+                card.querySelector('.delete-loan-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    handleDeleteLoan(loan.id);
+                });
+                loansSlider.appendChild(card);
+            });
+        }
+
+        // Рендер Истории (Только "Сегодня")
+        function renderHistory() {
+            const todayStart = new Date();
+            todayStart.setHours(0, 0, 0, 0);
+            const todayTransactions = allTransactions.filter(t => t.createdAt >= todayStart.getTime());
+            if (todayTransactions.length === 0) {
+                noHistoryEl.classList.remove('hidden');
+                historyList.innerHTML = '';
+                historyList.appendChild(noHistoryEl);
+                return;
+            }
+            noHistoryEl.classList.add('hidden');
+            historyList.innerHTML = '';
+            todayTransactions.forEach(trans => historyList.appendChild(createTransactionElement(trans)));
+        }
+        
+        // Рендер Модального Окна "Вся История"
+        function renderAllHistory() {
+            if (allTransactions.length === 0) {
+                allHistoryContent.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 p-10">История операций пуста.</p>`;
+                return;
+            }
+            allHistoryContent.innerHTML = '';
+            const grouped = allTransactions.reduce((acc, trans) => {
+                const date = new Date(trans.createdAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+                if (!acc[date]) acc[date] = [];
+                acc[date].push(trans);
+                return acc;
+            }, {});
+            const sortedDates = Object.keys(grouped);
+            sortedDates.forEach(date => {
+                const dateGroupEl = document.createElement('div');
+                dateGroupEl.innerHTML = `<h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">${date}</h3>`;
+                const transactionsEl = document.createElement('div');
+                transactionsEl.className = "bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden";
+                grouped[date].forEach((trans, index) => {
+                    const transEl = createTransactionElement(trans);
+                    transEl.className = "flex items-center justify-between p-4"; 
+                    if (index > 0) transEl.classList.add("border-t", "dark:border-gray-700");
+                    transactionsEl.appendChild(transEl);
+                });
+                dateGroupEl.appendChild(transactionsEl);
+                allHistoryContent.appendChild(dateGroupEl);
+            });
+        }
+
+        // Вспомогательная функция для создания элемента транзакции
+        function createTransactionElement(trans) {
+            const element = document.createElement('div');
+            const account = allAccounts.find(a => a.id === trans.accountId);
+            const isIncome = trans.type === 'income';
+            let description = trans.description;
+            let icon = isIncome ? 'fa-arrow-up text-green-500' : 'fa-arrow-down text-red-500';
+            let iconBg = isIncome ? 'bg-green-100 dark:bg-green-800' : 'bg-red-100 dark:bg-red-800';
+            let amountColor = isIncome ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500';
+            let sign = isIncome ? '+' : '-';
+            const isSavings = trans.category === 'savings-503020' || trans.category === 'savings-8020' || trans.category === 'savings';
+            if (isSavings) {
+                const toAccount = allAccounts.find(a => a.id === trans.toAccountId);
+                description = `Перевод на "${toAccount ? toAccount.name : 'Сбережения'}"`;
+                icon = 'fa-exchange-alt text-blue-500';
+                iconBg = 'bg-blue-100 dark:bg-blue-800';
+            }
+            element.className = 'bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex items-center justify-between';
+            element.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center ${iconBg}">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 dark:text-white truncate max-w-[150px] sm:max-w-xs">${description}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${account ? account.name : 'Счет удален'} | ${new Date(trans.createdAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold ${amountColor}">
+                        ${sign}${formatter.format(trans.amount)}
+                    </p>
+                </div>
+            `;
+            return element;
+        }
+
+        // Рендер Моделей Бюджета
+        function renderBudgetModels() {
+            currentBudgetModel = budgetModelSelect.value;
+            if (currentBudgetModel === 'none') {
+                const msg = '<p class="text-gray-500 dark:text-gray-400">Выберите модель, чтобы увидеть распределение.</p>';
+                drawerModelDisplay.innerHTML = msg;
+                mainModelDisplay.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Выберите модель бюджета в настройках</p>`;
+                return;
+            }
+            const now = new Date();
+            const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+            let totalIncome = 0;
+            const expensesByCategory = {
+                'needs-503020': 0, 'wants-503020': 0, 'savings-503020': 0,
+                'expenses-8020': 0, 'savings-8020': 0,
+                'needs': 0, 'wants': 0, 'savings': 0, 'loan': 0, 'other': 0
+            };
+            allTransactions.forEach(t => {
+                if (t.createdAt < monthStart) return;
+                if (t.type === 'income') totalIncome += t.amount;
+                else if (expensesByCategory.hasOwnProperty(t.category)) expensesByCategory[t.category] += t.amount;
+                else expensesByCategory['other'] += t.amount;
+            });
+            let modelHtml = '';
+            if (currentBudgetModel === '50-30-20') {
+                const needsLimit = totalIncome * 0.5;
+                const wantsLimit = totalIncome * 0.3;
+                const savingsLimit = totalIncome * 0.2;
+                const totalNeeds = (expensesByCategory['needs-503020'] || 0) + (expensesByCategory['needs'] || 0);
+                const totalWants = (expensesByCategory['wants-503020'] || 0) + (expensesByCategory['wants'] || 0);
+                const totalSavings = (expensesByCategory['savings-503020'] || 0) + (expensesByCategory['savings'] || 0);
+                modelHtml = `
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300">Месячный доход: ${formatter.format(totalIncome)}</h4>
+                    ${createProgressBar('Нужды (50%)', totalNeeds, needsLimit)}
+                    ${createProgressBar('Желания (30%)', totalWants, wantsLimit)}
+                    ${createProgressBar('Сбережения (20%)', totalSavings, savingsLimit)}
+                `;
+            } else if (currentBudgetModel === '80-20') {
+                const expensesLimit = totalIncome * 0.8;
+                const savingsLimit = totalIncome * 0.2;
+                const totalExpenses = (expensesByCategory['expenses-8020'] || 0) + (expensesByCategory['needs'] || 0) + (expensesByCategory['wants'] || 0) + (expensesByCategory['loan'] || 0) + (expensesByCategory['other'] || 0);
+                const totalSavings = (expensesByCategory['savings-8020'] || 0) + (expensesByCategory['savings'] || 0);
+                modelHtml = `
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300">Месячный доход: ${formatter.format(totalIncome)}</h4>
+                    ${createProgressBar('Расходы (80%)', totalExpenses, expensesLimit)}
+                    ${createProgressBar('Сбережения (20%)', totalSavings, savingsLimit)}
+                `;
+            }
+            drawerModelDisplay.innerHTML = modelHtml;
+            mainModelDisplay.innerHTML = modelHtml;
+        }
+
+        // Вспомогательная функция для прогресс-бара
+        function createProgressBar(label, spent, limit) {
+            const spentFormatted = formatter.format(spent);
+            const limitFormatted = formatter.format(Math.max(0, limit));
+            let percentage = (limit > 0) ? (spent / limit) * 100 : 0;
+            let colorClass = 'bg-blue-600';
+            if (percentage > 100) { percentage = 100; colorClass = 'bg-red-600'; }
+            else if (percentage > 90) colorClass = 'bg-yellow-500';
+            return `
+                <div class="space-y-1">
+                    <div class="flex justify-between text-sm font-medium">
+                        <span class="text-gray-700 dark:text-gray-300">${label}</span>
+                        <span class="text-gray-500 dark:text-gray-400">${spentFormatted} / ${limitFormatted}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                        <div class="${colorClass} h-2.5 rounded-full" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Рендер виджета Статуса Кредитов
+        function renderLoanStatus() {
+            if (allLoans.length === 0) {
+                loanStatusWidget.innerHTML = '';
+                return;
+            }
+            loanStatusWidget.innerHTML = '<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Статус по кредитам</h3>';
+            const now = new Date();
+            const today = now.getDate();
+            const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+            const loanPayments = allTransactions.filter(t => t.category === 'loan' && t.createdAt >= monthStart);
+            allLoans.forEach(loan => {
+                const paymentDate = loan.paymentDate;
+                const hasPaid = loanPayments.some(p => p.loanId === loan.id);
+                let statusText = '';
+                let statusColor = 'text-gray-500 dark:text-gray-400';
+                let statusIcon = 'fa-clock';
+                if (hasPaid) { statusText = 'Оплачено в этом месяце'; statusColor = 'text-green-600 dark:text-green-500'; statusIcon = 'fa-check-circle'; }
+                else if (today > paymentDate) { statusText = 'ПЛАТЕЖ ПРОСРОЧЕН!'; statusColor = 'text-red-600 dark:text-red-500'; statusIcon = 'fa-exclamation-circle'; }
+                else if (paymentDate - today <= 5) { statusText = `Срок оплаты через ${paymentDate - today} дн.`; statusColor = 'text-yellow-600 dark:text-yellow-500'; statusIcon = 'fa-hourglass-half'; }
+                else { statusText = `Оплата до ${paymentDate} числа`; }
+                loanStatusWidget.innerHTML += `
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex justify-between items-center">
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-white">${loan.name}</p>
+                            <p class="text-sm ${statusColor} font-medium"><i class="fas ${statusIcon} mr-1"></i> ${statusText}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-bold text-gray-900 dark:text-white">${formatter.format(loan.monthlyPayment)}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        // --- 5. Логика отправки форм ---
+        
+        // --- ИЗМЕНЕНО: ЛОГИКА REALTIME DATABASE ---
+        
+        // Добавление Счета
+        async function handleAccountSubmit(e) {
+            e.preventDefault();
+            if (!currentUserId) return;
+            const name = document.getElementById('account-name').value;
+            const balance = parseFloat(document.getElementById('account-balance').value);
+            const type = document.getElementById('account-type').value;
+            const color = document.getElementById('account-color').value;
+            const logoUrl = document.getElementById('account-logo-url').value;
+            try {
+                const newAccRef = push(ref(db, `users/${currentUserId}/accounts`));
+                await set(newAccRef, { name, balance, type, color, logoUrl, createdAt: serverTimestamp() });
+                toggleModal('account-modal', false);
+                accountForm.reset();
+                setupAccountModalUI();
+                showToast('Счет успешно добавлен!');
+            } catch (error) { console.error("Ошибка добавления счета:", error); showToast('Ошибка добавления счета.', true); }
+        }
+        
+        // Добавление Кредита
+        async function handleLoanSubmit(e) {
+            e.preventDefault();
+            if (!currentUserId) return;
+            try {
+                const newLoanRef = push(ref(db, `users/${currentUserId}/loans`));
+                await set(newLoanRef, {
+                    name: document.getElementById('loan-name').value,
+                    totalAmount: parseFloat(document.getElementById('loan-total-amount').value),
+                    paidAmount: parseFloat(document.getElementById('loan-paid-amount').value),
+                    monthlyPayment: parseFloat(document.getElementById('loan-monthly-payment').value),
+                    paymentDate: parseInt(document.getElementById('loan-payment-date').value),
+                    createdAt: serverTimestamp()
+                });
+                toggleModal('loan-modal', false);
+                loanForm.reset();
+                showToast('Кредит успешно добавлен!');
+            } catch (error) { console.error("Ошибка добавления кредита:", error); showToast('Ошибка добавления кредита.', true); }
+        }
+        
+        // Добавление Транзакции
+        async function handleTransactionSubmit(e) {
+            e.preventDefault();
+            if (!currentUserId) return;
+            const type = document.getElementById('transaction-type').value;
+            const description = transactionDescriptionInput.value;
+            const amount = parseFloat(transactionAmountInput.value);
+            const accountId = transactionAccountSelect.value;
+            const category = transactionCategory.value;
+            const loanId = (category === 'loan') ? transactionLoanSelect.value : null;
+            const isSavings = category === 'savings-503020' || category === 'savings-8020' || category === 'savings';
+            const toAccountId = (isSavings) ? transactionSavingsSelect.value : null;
+            
+            if (!type || !description || isNaN(amount) || !accountId) { showToast('Пожалуйста, заполните все поля.', true); return; }
+            if (isSavings && !toAccountId) { showToast('Пожалуйста, выберите сберегательный счет.', true); return; }
+            if (isSavings && toAccountId === accountId) { showToast('Нельзя перевести деньги на тот же счет.', true); return; }
+            
+            try {
+                // 1. Добавляем транзакцию
+                const newTransRef = push(ref(db, `users/${currentUserId}/transactions`));
+                await set(newTransRef, { description, amount, type, accountId, category, createdAt: serverTimestamp(), loanId, toAccountId });
+                
+                // 2. Обновляем баланс счета (Откуда) с помощью транзакции RTDB
+                const accountRef = ref(db, `users/${currentUserId}/accounts/${accountId}/balance`);
+                const amountToUpdate = (type === 'income') ? amount : -amount;
+                await runTransaction(accountRef, (currentBalance) => {
+                    return (currentBalance || 0) + amountToUpdate;
+                });
+                
+                // 3. Обновляем кредит (если это оплата)
+                if (type === 'expense' && category === 'loan' && loanId) {
+                    const loanRef = ref(db, `users/${currentUserId}/loans/${loanId}/paidAmount`);
+                    await runTransaction(loanRef, (currentPaid) => {
+                         return (currentPaid || 0) + amount;
+                    });
+                }
+                
+                // 4. Обновляем сберегательный счет (если это перевод)
+                if (type === 'expense' && isSavings && toAccountId) {
+                    const savingsAccountRef = ref(db, `users/${currentUserId}/accounts/${toAccountId}/balance`);
+                    await runTransaction(savingsAccountRef, (currentBalance) => {
+                        return (currentBalance || 0) + amount;
+                    });
+                }
+
+                toggleModal('transaction-modal', false);
+                transactionForm.reset();
+                loanPaymentContainer.classList.add('hidden');
+                savingsTransferContainer.classList.add('hidden');
+                showToast(`Транзакция (${type === 'income' ? 'Доход' : 'Расход'}) добавлена!`);
+            } catch (error) { console.error("Ошибка добавления транзакции:", error); showToast('Ошибка добавления транзакции.', true); }
+        }
+        
+        // --- 6. Логика Удаления ---
+        
+        // --- ИЗМЕНЕНО: ЛОГИКА REALTIME DATABASE ---
+        
+        async function handleDeleteAccount(accountId) {
+            if (!currentUserId) return;
+            
+            // 1. Проверяем, есть ли транзакции, связанные с этим счетом
+            const transRef = ref(db, `users/${currentUserId}/transactions`);
+            const transQueryFrom = dbQuery(transRef, orderByChild("accountId"), equalTo(accountId));
+            const transQueryTo = dbQuery(transRef, orderByChild("toAccountId"), equalTo(accountId));
+            
+            try {
+                const [transSnapshotFrom, transSnapshotTo] = await Promise.all([
+                    onValue(transQueryFrom, (snap) => snap.val(), { onlyOnce: true }),
+                    onValue(transQueryTo, (snap) => snap.val(), { onlyOnce: true })
+                ]);
+                
+                if (transSnapshotFrom || transSnapshotTo) {
+                    // НЕЛЬЗЯ УДАЛЯТЬ
+                    showToast('Нельзя удалить счет, к которому привязаны транзакции.', true);
+                    return;
+                }
+                
+                // 2. Если транзакций нет, удаляем счет
+                const accountRef = ref(db, `users/${currentUserId}/accounts/${accountId}`);
+                await remove(accountRef);
+                
+                showToast('Счет успешно удален.');
+                
+            } catch (error) { console.error("Ошибка удаления счета:", error); showToast('Ошибка удаления счета.', true); }
+        }
+        
+        async function handleDeleteLoan(loanId) {
+            if (!currentUserId) return;
+            
+            // 1. Проверяем, есть ли транзакции (платежи), связанные с этим кредитом
+             const transRef = ref(db, `users/${currentUserId}/transactions`);
+             const transQuery = dbQuery(transRef, orderByChild("loanId"), equalTo(loanId));
+            
+            try {
+                const transSnapshot = await onValue(transQuery, (snap) => snap.val(), { onlyOnce: true });
+                if (transSnapshot) {
+                    // НЕЛЬЗЯ УДАЛЯТЬ
+                    showToast('Нельзя удалить кредит, по которому были платежи.', true);
+                    return;
+                }
+                
+                // 2. Если платежей нет, удаляем кредит
+                const loanRef = ref(db, `users/${currentUserId}/loans/${loanId}`);
+                await remove(loanRef);
+                
+                showToast('Кредит успешно удален.');
+                
+            } catch (error) { console.error("Ошибка удаления кредита:", error); showToast('Ошибка удаления кредита.', true); }
+        }
+        
+        // --- 7. Функции Auth (Вход/Регистрация/Выход) ---
+        
+        async function handleLogin(e) {
+            e.preventDefault();
+            authError.textContent = '';
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // onAuthStateChanged сделает все остальное
+            } catch (error) {
+                console.error("Ошибка входа:", error.code);
+                authError.textContent = getAuthErrorMessage(error.code);
+            }
+        }
+        
+        async function handleRegister(e) {
+            e.preventDefault();
+            authError.textContent = '';
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                // onAuthStateChanged сделает все остальное
+            } catch (error) {
+                console.error("Ошибка регистрации:", error.code);
+                authError.textContent = getAuthErrorMessage(error.code);
+            }
+        }
+        
+        async function handleLogout() {
+            try {
+                await signOut(auth);
+                // onAuthStateChanged сделает все остальное
+                toggleDrawer(false); // Закрываем drawer
+            } catch (error) {
+                console.error("Ошибка выхода:", error);
+                showToast('Ошибка при выходе.', true);
+            }
+        }
+        
+        function getAuthErrorMessage(code) {
+            switch (code) {
+                case 'auth/invalid-email': return 'Неверный формат Email.';
+                case 'auth/user-not-found': return 'Пользователь не найден.';
+                case 'auth/wrong-password': return 'Неверный пароль.';
+                case 'auth/email-already-in-use': return 'Этот Email уже используется.';
+                case 'auth/weak-password': return 'Пароль слишком слабый (мин. 6 символов).';
+                case 'auth/invalid-credential': return 'Неверный Email или пароль.';
+                default: return 'Произошла ошибка. Попробуйте снова.';
+            }
+        }
+
+        // --- 8. Вспомогательные функции для UI (без изменений) ---
+        
+        // Открытие модалки транзакции (Доход/Расход)
+        function openTransactionModal(type) {
+            const isIncome = (type === 'income');
+            transactionModalTitle.textContent = isIncome ? 'Новый Доход' : 'Новый Расход';
+            submitTransactionBtn.textContent = isIncome ? 'Добавить Доход' : 'Добавить Расход';
+            submitTransactionBtn.className = `w-full text-white font-bold py-3 px-4 rounded-lg transition-all ${isIncome ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}`;
+            document.getElementById('transaction-type').value = type;
+            document.getElementById('category-container').classList.toggle('hidden', isIncome);
+            loanPaymentContainer.classList.add('hidden');
+            savingsTransferContainer.classList.add('hidden');
+            transactionAccountSelect.previousElementSibling.textContent = 'Счет';
+            if (!isIncome) populateCategories();
+            transactionForm.reset();
+            toggleModal('transaction-modal', true);
+        }
+        
+        // Динамическое заполнение категорий
+        function populateCategories() {
+            transactionCategory.innerHTML = '';
+            if (currentBudgetModel === '50-30-20') {
+                transactionCategory.innerHTML = `
+                    <option value="needs-503020">Нужды (50%)</option>
+                    <option value="wants-503020">Желания (30%)</option>
+                    <option value="savings-503020">Сбережения (20% - Перевод)</option>
+                    <option value="loan">Оплата кредита</option>
+                    <option value="other">Другое</option>
+                `;
+            } else if (currentBudgetModel === '80-20') {
+                transactionCategory.innerHTML = `
+                    <option value="expenses-8020">Расходы (80%)</option>
+                    <option value="savings-8020">Сбережения (20% - Перевод)</option>
+                    <option value="loan">Оплата кредита</option>
+                    <option value="other">Другое</option>
+                `;
+            } else {
+                 transactionCategory.innerHTML = `
+                    <option value="needs">Нужды</option>
+                    <option value="wants">Желания</option>
+                    <option value="savings">Сбережения (Перевод)</option>
+                    <option value="loan">Оплата кредита</option>
+                    <option value="other">Другое</option>
+                `;
+            }
+            transactionCategory.dispatchEvent(new Event('change'));
+        }
+        
+        function handleCategoryChange(e) {
+            const category = e.target.value;
+            loanPaymentContainer.classList.toggle('hidden', category !== 'loan');
+            const isSavings = category === 'savings-503020' || category === 'savings-8020' || category === 'savings';
+            savingsTransferContainer.classList.toggle('hidden', !isSavings);
+            if (category === 'loan') {
+                populateLoanSelect();
+                transactionLoanSelect.onchange = handleLoanSelectChange;
+            } else {
+                transactionLoanSelect.onchange = null;
+            }
+            if (isSavings) {
+                populateSavingsSelect();
+                transactionSavingsSelect.onchange = handleSavingsSelectChange;
+                transactionAccountSelect.previousElementSibling.textContent = 'Счет (Откуда)';
+            } else {
+                transactionSavingsSelect.onchange = null;
+                transactionAccountSelect.previousElementSibling.textContent = 'Счет';
+            }
+            if (category !== 'loan') resetTransactionFormPartial();
+        }
+
+        
+        // Настройка UI модалки Счета
+        function setupAccountModalUI() {
+            colorSwatches.forEach(swatch => {
+                swatch.addEventListener('click', () => {
+                    colorSwatches.forEach(s => s.classList.remove('selected'));
+                    swatch.classList.add('selected');
+                    accountColorInput.value = swatch.dataset.color;
+                });
+            });
+            colorSwatches[0].click();
+            accountTypeSelect.addEventListener('change', (e) => {
+                bankLogoContainer.classList.toggle('hidden', e.target.value !== 'bank');
+                if (e.target.value === 'cash') accountNameInput.value = 'Наличные';
+                else if (e.target.value === 'savings' || e.target.value === 'deposit') accountNameInput.value = 'Сберегательный счет';
+            });
+            accountTypeSelect.dispatchEvent(new Event('change'));
+            bankLogoInputs.forEach(logo => {
+                logo.addEventListener('click', () => {
+                    bankLogoInputs.forEach(l => l.classList.remove('selected'));
+                    logo.classList.add('selected');
+                    accountLogoUrlInput.value = logo.dataset.bankLogoUrl;
+                    accountNameInput.value = logo.dataset.bankName;
+                });
+            });
+            bankLogoInputs.forEach(l => l.classList.remove('selected'));
+            accountLogoUrlInput.value = '';
+        }
+        
+        // Заполнение <select> для счетов (Откуда)
+        function populateAccountSelect() {
+            transactionAccountSelect.innerHTML = '';
+            if (allAccounts.length === 0) {
+                transactionAccountSelect.innerHTML = '<option value="">Сначала добавьте счет</option>';
+                return;
+            }
+            allAccounts.forEach(acc => {
+                const option = document.createElement('option');
+                option.value = acc.id;
+                option.textContent = `${acc.name} (${formatter.format(acc.balance)})`;
+                transactionAccountSelect.appendChild(option);
+            });
+        }
+        
+        // Заполнение <select> для кредитов
+        function populateLoanSelect() {
+            transactionLoanSelect.innerHTML = '';
+            const unpaidLoans = allLoans.filter(l => l.paidAmount < l.totalAmount);
+            if (unpaidLoans.length === 0) {
+                transactionLoanSelect.innerHTML = '<option value="">Нет активных кредитов</option>';
+                return;
+            }
+            transactionLoanSelect.innerHTML = '<option value="">Выберите кредит...</option>';
+            unpaidLoans.forEach(loan => {
+                const option = document.createElement('option');
+                option.value = loan.id;
+                option.textContent = `${loan.name} (${formatter.format(loan.monthlyPayment)})`;
+                transactionLoanSelect.appendChild(option);
+            });
+        }
+        
+        // Заполнение <select> для сбережений (Куда)
+        function populateSavingsSelect() {
+            transactionSavingsSelect.innerHTML = '';
+            const savingsAccounts = allAccounts.filter(a => a.type === 'savings' || a.type === 'deposit');
+            if (savingsAccounts.length === 0) {
+                transactionSavingsSelect.innerHTML = '<option value="">Нет сберегательных счетов</option>';
+                return;
+            }
+            transactionSavingsSelect.innerHTML = '<option value="">Выберите счет...</option>';
+            savingsAccounts.forEach(acc => {
+                const option = document.createElement('option');
+                option.value = acc.id;
+                option.textContent = `${acc.name} (${formatter.format(acc.balance)})`;
+                transactionSavingsSelect.appendChild(option);
+            });
+        }
+
+        // Автозаполнение при выборе кредита
+        function handleLoanSelectChange(e) {
+            const selectedLoanId = e.target.value;
+            if (!selectedLoanId) { resetTransactionFormPartial(); return; }
+            const loan = allLoans.find(l => l.id === selectedLoanId);
+            if (loan) {
+                transactionDescriptionInput.value = `Оплата кредита - ${loan.name}`;
+                transactionAmountInput.value = loan.monthlyPayment;
+            }
+        }
+        
+        // Автозаполнение при выборе сбережений
+        function handleSavingsSelectChange(e) {
+            const selectedAccountId = e.target.value;
+            if (!selectedAccountId) { transactionDescriptionInput.value = ''; return; }
+            const account = allAccounts.find(a => a.id === selectedAccountId);
+            if(account) transactionDescriptionInput.value = `Перевод на "${account.name}"`;
+        }
+        
+        // Частичный сброс формы
+        function resetTransactionFormPartial() {
+             transactionDescriptionInput.value = '';
+             transactionAmountInput.value = '';
+        }
+
+    </script>
+
+</body>
+</html>
+
