@@ -492,6 +492,8 @@
                             <p id="total-loan-balance" class="text-2xl font-bold text-red-600 dark:text-red-500 truncate">0 ₸</p>
                         </div>
                     </div>
+
+                    
                     
                     <!-- КНОПКИ Доход/Расход -->
                     <div class="grid grid-cols-2 gap-4">
@@ -1081,11 +1083,11 @@
                 toggleLoanStatusBtn.addEventListener('click', toggleLoanStatusVisibility);
                 
                 // Drag-n-Drop
-                accountsSlider.addEventListener('dragstart', handleDragStart);
-                accountsSlider.addEventListener('dragover', handleDragOver);
-                accountsSlider.addEventListener('dragleave', handleDragLeave);
-                accountsSlider.addEventListener('drop', handleDrop);
-                accountsSlider.addEventListener('dragend', handleDragEnd);
+                // accountsSlider.addEventListener('dragstart', handleDragStart);
+                // accountsSlider.addEventListener('dragover', handleDragOver);
+                // accountsSlider.addEventListener('dragleave', handleDragLeave);
+                // accountsSlider.addEventListener('drop', handleDrop);
+                // accountsSlider.addEventListener('dragend', handleDragEnd);
 
                 // НОВОЕ: Drag-n-Drop (Touch)
                 accountsSlider.addEventListener('touchstart', handleTouchStart, { passive: false });
