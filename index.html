@@ -465,22 +465,32 @@
                 <div class="space-y-6">
                     
                     <!-- Балансы -->
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 gap-4"> <!-- ИЗМЕНЕНО: grid-cols-1 -->
                         <!-- Общий Баланс -->
                         <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
                             <span class="text-sm font-medium text-gray-500 dark:text-gray-400" data-lang-key="dashboard.totalBalance">Общий баланс</span>
-                            <p id="total-balance" class="text-2xl font-bold text-gray-900 dark:text-white truncate">0 ₸</p>
+                            <p id="total-balance" class="text-3xl font-bold text-gray-900 dark:text-white truncate">0 ₸</p> <!-- ИЗМЕНЕНО: text-3xl -->
                         </div>
-                        <!-- Сбережения -->
-                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
-                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400" data-lang-key="dashboard.savings">Сбережения</span>
-                            <p id="savings-balance" class="text-2xl font-bold text-green-600 dark:text-green-500 truncate">0 ₸</p>
-                        </div>
+                        <!-- Сбережения (УДАЛЕНО ОТСЮДА) -->
                     </div>
 
                     <!-- Модель бюджета на главном -->
                     <div id="main-model-display" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md">
                          <p class="text-center text-gray-500 dark:text-gray-400" data-lang-key="settings.modelSelectPromptShort">Выберите модель бюджета в настройках</p>
+                    </div>
+
+                    <!-- НОВЫЙ БЛОК: Сбережения и Долг -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Сбережения (ПЕРЕМЕЩЕНО) -->
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
+                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400" data-lang-key="dashboard.savings">Сбережения</span>
+                            <p id="savings-balance" class="text-2xl font-bold text-green-600 dark:text-green-500 truncate">0 ₸</p>
+                        </div>
+                        <!-- Общий Долг (ПЕРЕМЕЩЕНО) -->
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
+                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400" data-lang-key="loans.totalDebt">Общий долг</span>
+                            <p id="total-loan-balance" class="text-2xl font-bold text-red-600 dark:text-red-500 truncate">0 ₸</p>
+                        </div>
                     </div>
                     
                     <!-- КНОПКИ Доход/Расход -->
@@ -519,10 +529,7 @@
                                 + Новый кредит
                             </button>
                         </div>
-                        <div class="mb-2 text-right">
-                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400" data-lang-key="loans.totalDebt">Общий долг:</span>
-                            <strong id="total-loan-balance" class="text-lg font-semibold text-gray-900 dark:text-white">0 ₸</strong>
-                        </div>
+                        <!-- УДАЛЕНО: div "Общий долг:" (перенесен выше) -->
                         <div id="loans-slider" class="slider-container flex overflow-x-auto gap-4 py-2 scroll-snap-x-mandatory">
                             <!-- Карточки кредитов будут добавлены JS -->
                             <div id="no-loans" class="text-center text-gray-500 dark:text-gray-400 w-full p-10" data-lang-key="loans.noLoans">
@@ -1079,6 +1086,11 @@
                 accountsSlider.addEventListener('dragleave', handleDragLeave);
                 accountsSlider.addEventListener('drop', handleDrop);
                 accountsSlider.addEventListener('dragend', handleDragEnd);
+
+                // НОВОЕ: Drag-n-Drop (Touch)
+                accountsSlider.addEventListener('touchstart', handleTouchStart, { passive: false });
+                accountsSlider.addEventListener('touchmove', handleTouchMove, { passive: false });
+                accountsSlider.addEventListener('touchend', handleTouchEnd);
 
                 // Запускаем главный процесс аутентификации
                 setupAuthListener();
@@ -1992,6 +2004,103 @@
              transactionAmountInput.value = '';
         }
 
+        // --- НОВЫЕ ФУНКЦИИ: Drag-n-Drop (Touch Handlers) ---
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let scrollInterval = null; // Для авто-скролла
+        let isDragging = false; // Флаг, что мы тащим, а не скроллим
+        let isScrolling = false; // Флаг, что мы скроллим, а не тащим
+
+        function handleTouchStart(e) {
+            const targetCard = e.target.closest('.slider-item');
+            if (!targetCard) return;
+            
+            draggedItem = targetCard;
+            originalIndex = allAccounts.findIndex(acc => acc.id === draggedItem.dataset.accountId);
+            
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            isDragging = false;
+            isScrolling = false;
+        }
+        
+        function handleTouchMove(e) {
+            if (!draggedItem || isScrolling) return;
+
+            const touchCurrentX = e.touches[0].clientX;
+            const touchCurrentY = e.touches[0].clientY;
+            const deltaX = touchCurrentX - touchStartX;
+            const deltaY = touchCurrentY - touchStartY;
+
+            if (!isDragging) {
+                // Мертвая зона: определяем, тащит пользователь или скроллит
+                if (Math.abs(deltaX) > Math.abs(deltaY) + 5) { // Тащим горизонтально
+                    isDragging = true;
+                    draggedItem.classList.add('dragging'); 
+                    accountsSlider.style.overflowX = 'hidden'; // Отключаем скролл слайдера
+                } else if (Math.abs(deltaY) > Math.abs(deltaX) + 5) { // Скроллим вертикально
+                    isScrolling = true;
+                    draggedItem = null; // Отпускаем
+                    return;
+                }
+            }
+            
+            if (isDragging) {
+                e.preventDefault(); // Предотвращаем скролл страницы
+                
+                // Логика перемещения (такая же, как в handleDragOver)
+                const afterElement = getDragAfterElement(accountsSlider, touchCurrentX);
+                if (afterElement == null) {
+                    accountsSlider.appendChild(draggedItem);
+                } else {
+                    accountsSlider.insertBefore(draggedItem, afterElement);
+                }
+                
+                // Авто-скролл
+                const sliderRect = accountsSlider.getBoundingClientRect();
+                const edgeThreshold = 50; 
+                if (touchCurrentX < sliderRect.left + edgeThreshold) {
+                    startAutoScroll(-10); // Влево
+                } else if (touchCurrentX > sliderRect.right - edgeThreshold) {
+                    startAutoScroll(10); // Вправо
+                } else {
+                    stopAutoScroll();
+                }
+            }
+        }
+        
+        function handleTouchEnd(e) {
+            if (!draggedItem) return;
+            
+            stopAutoScroll();
+            accountsSlider.style.overflowX = 'auto'; // Возвращаем скролл
+            
+            if (isDragging) {
+                draggedItem.classList.remove('dragging');
+                saveAccountOrder(); // Сохраняем
+            }
+            
+            draggedItem = null;
+            originalIndex = -1;
+            isDragging = false;
+            isScrolling = false;
+        }
+        
+        // Вспомогательные функции для авто-скролла
+        function startAutoScroll(step) {
+            if (scrollInterval) return;
+            scrollInterval = setInterval(() => {
+                accountsSlider.scrollLeft += step;
+            }, 30);
+        }
+
+        function stopAutoScroll() {
+            clearInterval(scrollInterval);
+            scrollInterval = null;
+        }
+        // --- КОНЕЦ НОВЫХ ФУНКЦИЙ ---
+
+
         // --- НОВЫЕ ФУНКЦИИ: Drag-n-Drop ---
         let draggedItem = null;
         let originalIndex = -1;
@@ -2094,5 +2203,6 @@
 
 </body>
 </html>
+
 
 
