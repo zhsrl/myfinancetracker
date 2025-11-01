@@ -575,7 +575,8 @@
             serverTimestamp,
             query as dbQuery, // Переименовываем, чтобы не конфликтовать с query Firestore (хотя мы его удалили)
             orderByChild,
-            equalTo
+            equalTo,
+            get // <-- ИСПРАВЛЕНИЕ: Добавлен get
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         // --- 0. КОНФИГУРАЦИЯ FIREBASE (ВАЖНО!) ---
@@ -1309,12 +1310,13 @@
             const transQueryTo = dbQuery(transRef, orderByChild("toAccountId"), equalTo(accountId));
             
             try {
+                // --- ИСПРАВЛЕНО: Используем get() вместо onValue() ---
                 const [transSnapshotFrom, transSnapshotTo] = await Promise.all([
-                    onValue(transQueryFrom, (snap) => snap.val(), { onlyOnce: true }),
-                    onValue(transQueryTo, (snap) => snap.val(), { onlyOnce: true })
+                    get(transQueryFrom),
+                    get(transQueryTo)
                 ]);
                 
-                if (transSnapshotFrom || transSnapshotTo) {
+                 if (transSnapshotFrom.exists() || transSnapshotTo.exists()) {
                     // НЕЛЬЗЯ УДАЛЯТЬ
                     showToast('Нельзя удалить счет, к которому привязаны транзакции.', true);
                     return;
@@ -1326,7 +1328,7 @@
                 
                 showToast('Счет успешно удален.');
                 
-            } catch (error) { console.error("Ошибка удаления счета:", error); showToast('Ошибка удаления счета.', true); }
+            } catch (error) { console.error("Ошибка удаления счета:", error); showToast(`Ошибка удаления счета: ${error}.`, true); }
         }
         
         async function handleDeleteLoan(loanId) {
@@ -1337,8 +1339,9 @@
              const transQuery = dbQuery(transRef, orderByChild("loanId"), equalTo(loanId));
             
             try {
-                const transSnapshot = await onValue(transQuery, (snap) => snap.val(), { onlyOnce: true });
-                if (transSnapshot) {
+                // --- ИСПРАВЛЕНО: Используем get() ---
+                const transSnapshot = await get(transQuery);
+                if (transSnapshot.exists()) {
                     // НЕЛЬЗЯ УДАЛЯТЬ
                     showToast('Нельзя удалить кредит, по которому были платежи.', true);
                     return;
@@ -1583,4 +1586,5 @@
 
 </body>
 </html>
+
 
