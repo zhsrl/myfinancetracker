@@ -102,12 +102,6 @@
             border-color: #3b82f6; /* blue-500 */
             transform: scale(1.1);
         }
-        
-        /* Cтили для Drag-n-Drop */
-        .slider-item.dragging {
-            opacity: 0.5;
-            border: 2px dashed #3b82f6;
-        }
     </style>
     <script>
         // Управление темной темой (АВТОМАТИЧЕСКОЕ)
@@ -141,10 +135,10 @@
             
             <!-- Табы Вход/Регистрация -->
             <div class="flex mb-6 border-b border-gray-200 dark:border-gray-700">
-                <button id="auth-tab-login" class="flex-1 py-3 font-semibold text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400" data-lang-key="auth.login">
+                <button id="auth-tab-login" class="flex-1 py-3 font-semibold text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400">
                     Вход
                 </button>
-                <button id="auth-tab-register" class="flex-1 py-3 font-semibold text-gray-500 dark:text-gray-400" data-lang-key="auth.register">
+                <button id="auth-tab-register" class="flex-1 py-3 font-semibold text-gray-500 dark:text-gray-400">
                     Регистрация
                 </button>
             </div>
@@ -152,14 +146,14 @@
             <!-- Форма Входа -->
             <form id="auth-form-login">
                 <div class="mb-4">
-                    <label for="login-email" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="auth.email">Email</label>
+                    <label for="login-email" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Email</label>
                     <input type="email" id="login-email" placeholder="email@example.com" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                 </div>
                 <div class="mb-6">
-                    <label for="login-password" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="auth.password">Пароль</label>
+                    <label for="login-password" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Пароль</label>
                     <input type="password" id="login-password" placeholder="••••••••" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all" data-lang-key="auth.loginButton">
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">
                     Войти
                 </button>
             </form>
@@ -167,14 +161,14 @@
             <!-- Форма Регистрации (скрыта) -->
             <form id="auth-form-register" class="hidden">
                 <div class="mb-4">
-                    <label for="register-email" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="auth.email">Email</label>
+                    <label for="register-email" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Email</label>
                     <input type="email" id="register-email" placeholder="email@example.com" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                 </div>
                 <div class="mb-6">
-                    <label for="register-password" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="auth.password">Пароль</label>
-                    <input type="password" id="register-password" placeholder="••••••••" data-lang-key-placeholder="auth.passwordPlaceholder" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                    <label for="register-password" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Пароль</slabel>
+                    <input type="password" id="register-password" placeholder="Мин. 6 символов" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all" data-lang-key="auth.registerButton">
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">
                     Создать аккаунт
                 </button>
             </form>
@@ -205,19 +199,19 @@
                 <form id="transaction-form">
                     <!-- Описание -->
                     <div class="mb-4">
-                        <label for="transaction-description" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.description">Описание</label>
-                        <input type="text" id="transaction-description" placeholder="Напр., Покупка в Magnum" data-lang-key-placeholder="forms.descriptionPlaceholder" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                        <label for="transaction-description" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Описание</label>
+                        <input type="text" id="transaction-description" placeholder="Напр., Покупка в Magnum" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                     </div>
                     
                     <!-- Сумма -->
                     <div class="mb-4">
-                        <label for="transaction-amount" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.amount">Сумма (₸)</label>
+                        <label for="transaction-amount" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Сумма (₸)</label>
                         <input type="number" id="transaction-amount" placeholder="0" step="0.01" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                     </div>
                     
                     <!-- Выбор счета (Откуда) -->
                     <div class="mb-4">
-                        <label for="transaction-account" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.account">Счет</label>
+                        <label for="transaction-account" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Счет</label>
                         <select id="transaction-account" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none" required>
                             <!-- Опции для счетов будут добавлены JS -->
                         </select>
@@ -225,7 +219,7 @@
 
                     <!-- Категория (ДИНАМИЧЕСКАЯ) -->
                     <div id="category-container" class="mb-4">
-                        <label for="transaction-category" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.category">Категория</label>
+                        <label for="transaction-category" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Категория</label>
                         <select id="transaction-category" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
                             <!-- Опции для категорий будут добавлены JS -->
                         </select>
@@ -233,7 +227,7 @@
 
                     <!-- Выбор кредита (для оплаты) -->
                     <div id="loan-payment-container" class="mb-4 hidden">
-                        <label for="transaction-loan-select" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.whichLoan">Какой кредит оплачиваете?</label>
+                        <label for="transaction-loan-select" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Какой кредит оплачиваете?</label>
                         <select id="transaction-loan-select" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
                             <!-- Опции для кредитов будут добавлены JS -->
                         </select>
@@ -241,7 +235,7 @@
                     
                     <!-- Выбор счета для сбережений (Перевод) -->
                     <div id="savings-transfer-container" class="mb-4 hidden">
-                        <label for="transaction-savings-select" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.whichSavingsAccount">На какой сберегательный счет?</label>
+                        <label for="transaction-savings-select" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">На какой сберегательный счет?</label>
                         <select id="transaction-savings-select" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
                             <!-- Опции для сбережений будут добавлены JS -->
                         </select>
@@ -262,23 +256,23 @@
                 <button id="close-account-modal" class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
                     <i class="fas fa-times fa-lg"></i>
                 </button>
-                <h3 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6" data-lang-key="forms.newAccountTitle">Новый счет</h3>
+                <h3 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">Новый счет</h3>
                 
                 <form id="account-form">
                     <!-- Тип счета -->
                     <div class="mb-4">
-                        <label for="account-type" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.accountType">Тип счета</label>
+                        <label for="account-type" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Тип счета</label>
                         <select id="account-type" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
-                            <option value="bank" data-lang-key="accountTypes.bank">Банк</option>
-                            <option value="deposit" data-lang-key="accountTypes.deposit">Депозит</option>
-                            <option value="savings" data-lang-key="accountTypes.savings">Сбережение</option>
-                            <option value="cash" data-lang-key="accountTypes.cash">Наличный</option>
+                            <option value="bank">Банк</option>
+                            <option value="deposit">Депозит</option>
+                            <option value="savings">Сбережение</option>
+                            <option value="cash">Наличный</option>
                         </select>
                     </div>
 
                     <!-- Выбор банка (появляется если тип "Банк") -->
                     <div id="bank-logo-container" class="mb-4">
-                         <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.selectBank">Выберите банк</label>
+                         <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Выберите банк</label>
                          <div class="grid grid-cols-3 gap-3 justify-center">
                             <div class="bank-logo" data-bank-name="Kaspi Bank" data-bank-logo-url="https://kaspi.kz/img/Logo.svg">
                                 <img src="https://kaspi.kz/img/Logo.svg" alt="Kaspi Bank" onerror="this.parentElement.innerHTML = 'K'; this.parentElement.classList.add('logo-fallback');">
@@ -301,19 +295,19 @@
 
                     <!-- Название счета -->
                     <div class="mb-4">
-                        <label for="account-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.accountName">Название</label>
-                        <input type="text" id="account-name" placeholder="Напр., Kaspi Bank" data-lang-key-placeholder="forms.accountNamePlaceholder" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                        <label for="account-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Название</label>
+                        <input type="text" id="account-name" placeholder="Напр., Kaspi Bank" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                     </div>
 
                     <!-- Начальный баланс -->
                     <div class="mb-4">
-                        <label for="account-balance" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.currentBalance">Текущий баланс (₸)</label>
+                        <label for="account-balance" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Текущий баланс (₸)</label>
                         <input type="number" id="account-balance" placeholder="0" step="0.01" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                     </div>
                     
                     <!-- Выбор цвета -->
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.cardColor">Цвет карты</label>
+                        <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Цвет карты</label>
                         <div id="color-picker" class="flex flex-wrap gap-3 justify-center">
                             <div class="color-swatch selected" data-color="from-blue-500 to-blue-700" style="background: linear-gradient(to right, #3b82f6, #1d4ed8);"></div>
                             <div class="color-swatch" data-color="from-green-500 to-green-700" style="background: linear-gradient(to right, #22c55e, #15803d);"></div>
@@ -329,7 +323,7 @@
                         <input type="hidden" id="account-color" value="from-blue-500 to-blue-700">
                     </div>
                     
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all" data-lang-key="forms.addAccountButton">
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">
                         Добавить счет
                     </button>
                 </form>
@@ -342,36 +336,36 @@
                 <button id="close-loan-modal" class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
                     <i class="fas fa-times fa-lg"></i>
                 </button>
-                <h3 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6" data-lang-key="forms.newLoanTitle">Новый кредит</h3>
+                <h3 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">Новый кредит</h3>
                 
                 <form id="loan-form">
                     <!-- Название -->
                     <div class="mb-4">
-                        <label for="loan-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.loanName">Название</label>
-                        <input type="text" id="loan-name" placeholder="Напр., Автокредит" data-lang-key-placeholder="forms.loanNamePlaceholder" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
+                        <label for="loan-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Название</label>
+                        <input type="text" id="loan-name" placeholder="Напр., Автокредит" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                     </div>
                     <!-- Общая сумма -->
                     <div class="mb-4">
-                        <label for="loan-total-amount" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.loanTotalAmount">Общая сумма (₸)</label>
+                        <label for="loan-total-amount" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Общая сумма (₸)</label>
                         <input type="number" id="loan-total-amount" placeholder="5000000" step="any" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                     </div>
                     <!-- Уже оплачено -->
                     <div class="mb-4">
-                        <label for="loan-paid-amount" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.loanPaidAmount">Уже оплачено (₸)</label>
+                        <label for="loan-paid-amount" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Уже оплачено (₸)</label>
                         <input type="number" id="loan-paid-amount" placeholder="0" step="any" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                     </div>
                     <!-- Ежемесячный платеж -->
                     <div class="mb-4">
-                        <label for="loan-monthly-payment" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.loanMonthlyPayment">Ежемесячный платеж (₸)</label>
+                        <label for="loan-monthly-payment" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Ежемесячный платеж (₸)</label>
                         <input type="number" id="loan-monthly-payment" placeholder="50000" step="any" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                     </div>
                     <!-- Дата платежа -->
                     <div class="mb-4">
-                        <label for="loan-payment-date" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="forms.loanPaymentDate">Число ежемесячного платежа</label>
+                        <label for="loan-payment-date" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Число ежемесячного платежа</label>
                         <input type="number" id="loan-payment-date" placeholder="15" min="1" max="31" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white" required>
                     </div>
                     
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all" data-lang-key="forms.addLoanButton">
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">
                         Добавить кредит
                     </button>
                 </form>
@@ -382,7 +376,7 @@
         <div id="history-modal" class="fixed inset-0 bg-gray-100 dark:bg-gray-900 z-50 hidden overflow-y-auto fade-in">
             <div class="w-full max-w-4xl mx-auto p-4 sm:p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white" data-lang-key="history.allTitle">Вся история</h2>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Вся история</h2>
                     <button id="close-history-modal" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
                         <i class="fas fa-times fa-2x"></i>
                     </button>
@@ -400,37 +394,26 @@
         <div id="drawer-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden transition-opacity duration-300"></div>
         <div id="drawer-content" class="fixed top-0 left-0 h-full w-80 max-w-[80%] bg-white dark:bg-gray-800 shadow-2xl z-40 transform -translate-x-full transition-transform duration-300 p-6 overflow-y-auto flex flex-col">
             <div class="flex-grow">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6" data-lang-key="settings.title">Настройки</h2>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Настройки</h2>
             
                 <!-- Блок Модели бюджета -->
                 <div>
-                    <label for="budget-model-select" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="settings.budgetModel">Модель Управления</label>
+                    <label for="budget-model-select" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Модель Управления</label>
                     <select id="budget-model-select" class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white appearance-none">
-                        <option value="none" data-lang-key="settings.modelNone">Не выбрана</option>
+                        <option value="none">Не выбрана</option>
                         <option value="50-30-20">50 / 30 / 20</option>
                         <option value="80-20">80 / 20 (Накопление)</option>
                     </select>
                     
                     <div id="model-display" class="mt-6 space-y-3">
-                        <p class="text-gray-500 dark:text-gray-400" data-lang-key="settings.modelSelectPrompt">Выберите модель, чтобы увидеть распределение.</p>
-                    </div>
-                </div>
-                
-                <hr class="my-6 dark:border-gray-600">
-
-                <!-- Блок Языка -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2" data-lang-key="settings.language">Язык</label>
-                    <div class="flex gap-2">
-                        <button id="lang-ru" class="lang-switcher flex-1 p-2 rounded-lg data-[active=true]:bg-blue-600 data-[active=true]:text-white bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">Русский</button>
-                        <button id="lang-kk" class="lang-switcher flex-1 p-2 rounded-lg data-[active=true]:bg-blue-600 data-[active=true]:text-white bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">Қазақша</button>
+                        <p class="text-gray-500 dark:text-gray-400">Выберите модель, чтобы увидеть распределение.</p>
                     </div>
                 </div>
                 
                 <hr class="my-6 dark:border-gray-600">
                 
                 <div class="text-left text-xs text-gray-400">
-                    <span data-lang-key="settings.loggedInAs">Вы вошли как:</span> <br> <strong id="user-email-display" class="font-mono text-sm break-words">...</strong>
+                    Вы вошли как: <br> <strong id="user-email-display" class="font-mono text-sm break-words">...</strong>
                 </div>
             </div>
             
@@ -438,7 +421,7 @@
             <div class="mt-6">
                 <button id="logout-button" class="w-full flex items-center justify-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span class="font-semibold" data-lang-key="settings.logout">Выйти</span>
+                    <span class="font-semibold">Выйти</span>
                 </button>
             </div>
         </div>
@@ -465,59 +448,47 @@
                 <div class="space-y-6">
                     
                     <!-- Балансы -->
-                    <div class="grid grid-cols-1 gap-4"> <!-- ИЗМЕНЕНО: grid-cols-1 -->
+                    <div class="grid grid-cols-2 gap-4">
                         <!-- Общий Баланс -->
                         <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
-                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400" data-lang-key="dashboard.totalBalance">Общий баланс</span>
-                            <p id="total-balance" class="text-3xl font-bold text-gray-900 dark:text-white truncate">0 ₸</p> <!-- ИЗМЕНЕНО: text-3xl -->
+                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Общий баланс</span>
+                            <p id="total-balance" class="text-2xl font-bold text-gray-900 dark:text-white truncate">0 ₸</p>
                         </div>
-                        <!-- Сбережения (УДАЛЕНО ОТСЮДА) -->
+                        <!-- Сбережения -->
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
+                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Сбережения</span>
+                            <p id="savings-balance" class="text-2xl font-bold text-green-600 dark:text-green-500 truncate">0 ₸</p>
+                        </div>
                     </div>
 
                     <!-- Модель бюджета на главном -->
                     <div id="main-model-display" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md">
-                         <p class="text-center text-gray-500 dark:text-gray-400" data-lang-key="settings.modelSelectPromptShort">Выберите модель бюджета в настройках</p>
+                         <p class="text-center text-gray-500 dark:text-gray-400">Выберите модель бюджета в настройках</p>
                     </div>
-
-                    <!-- НОВЫЙ БЛОК: Сбережения и Долг -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <!-- Сбережения (ПЕРЕМЕЩЕНО) -->
-                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
-                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400" data-lang-key="dashboard.savings">Сбережения</span>
-                            <p id="savings-balance" class="text-2xl font-bold text-green-600 dark:text-green-500 truncate">0 ₸</p>
-                        </div>
-                        <!-- Общий Долг (ПЕРЕМЕЩЕНО) -->
-                        <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md text-center">
-                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400" data-lang-key="loans.totalDebt">Общий долг</span>
-                            <p id="total-loan-balance" class="text-2xl font-bold text-red-600 dark:text-red-500 truncate">0 ₸</p>
-                        </div>
-                    </div>
-
-                    
                     
                     <!-- КНОПКИ Доход/Расход -->
                     <div class="grid grid-cols-2 gap-4">
                         <button id="nav-income" class="flex items-center justify-center gap-2 bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 p-4 rounded-2xl shadow-md hover:bg-green-200 dark:hover:bg-green-700 transition-all">
                             <i class="fas fa-plus-circle fa-lg"></i>
-                            <span class="text-lg font-semibold" data-lang-key="dashboard.income">Доход</span>
+                            <span class="text-lg font-semibold">Доход</span>
                         </button>
                         <button id="nav-expense" class="flex items-center justify-center gap-2 bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-300 p-4 rounded-2xl shadow-md hover:bg-red-200 dark:hover:bg-red-700 transition-all">
                             <i class="fas fa-minus-circle fa-lg"></i>
-                            <span class="text-lg font-semibold" data-lang-key="dashboard.expense">Расход</span>
+                            <span class="text-lg font-semibold">Расход</span>
                         </button>
                     </div>
 
                     <!-- Слайдер Счетов -->
                     <div>
                         <div class="flex justify-between items-center mb-3">
-                            <h2 class="text-xl font-bold text-gray-900 dark:text-white" data-lang-key="accounts.title">Счета</h2>
-                            <button id="add-account-btn" class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline" data-lang-key="accounts.new">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Счета</h2>
+                            <button id="add-account-btn" class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline">
                                 + Новый счет
                             </button>
                         </div>
                         <div id="accounts-slider" class="slider-container flex overflow-x-auto gap-4 py-2 scroll-snap-x-mandatory">
                             <!-- Карточки счетов будут добавлены JS -->
-                            <div id="no-accounts" class="text-center text-gray-500 dark:text-gray-400 w-full p-10" data-lang-key="accounts.noAccounts">
+                            <div id="no-accounts" class="text-center text-gray-500 dark:text-gray-400 w-full p-10">
                                 У вас пока нет счетов.
                             </div>
                         </div>
@@ -526,31 +497,22 @@
                     <!-- Слайдер Кредитов -->
                     <div>
                         <div class="flex justify-between items-center mb-3">
-                            <h2 class="text-xl font-bold text-gray-900 dark:text-white" data-lang-key="loans.title">Кредиты</h2>
-                            <button id="add-loan-btn" class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline" data-lang-key="loans.new">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Кредиты</h2>
+                            <button id="add-loan-btn" class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline">
                                 + Новый кредит
                             </button>
                         </div>
-                        <!-- УДАЛЕНО: div "Общий долг:" (перенесен выше) -->
                         <div id="loans-slider" class="slider-container flex overflow-x-auto gap-4 py-2 scroll-snap-x-mandatory">
                             <!-- Карточки кредитов будут добавлены JS -->
-                            <div id="no-loans" class="text-center text-gray-500 dark:text-gray-400 w-full p-10" data-lang-key="loans.noLoans">
+                            <div id="no-loans" class="text-center text-gray-500 dark:text-gray-400 w-full p-10">
                                 У вас нет активных кредитов.
                             </div>
                         </div>
                     </div>
                     
                     <!-- Статус по кредитам -->
-                    <div id="loan-status-widget">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-white" data-lang-key="loans.statusTitle">Статус по кредитам</h3>
-                            <button id="toggle-loan-status" class="text-blue-600 dark:text-blue-400 text-sm p-1">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                        <div id="loan-status-content" class="space-y-3">
-                            <!-- Статус будет добавлен JS -->
-                        </div>
+                    <div id="loan-status-widget" class="space-y-3">
+                        <!-- Статус будет добавлен JS -->
                     </div>
 
                 </div> <!-- Конец левой колонки -->
@@ -558,13 +520,13 @@
                 <!-- Правая колонка (История) -->
                 <div>
                     <div class="flex justify-between items-center mb-3">
-                        <h2 class="text-xl font-bold text-gray-900 dark:text-white" data-lang-key="history.today">История (Сегодня)</h2>
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">История (Сегодня)</h2>
                         <button id="show-all-history-btn" class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline">
-                            <span data-lang-key="history.all">Все</span> <i class="fas fa-arrow-right text-xs"></i>
+                            Все <i class="fas fa-arrow-right text-xs"></i>
                         </button>
                     </div>
                     <div id="history-list" class="space-y-3">
-                        <div id="no-history" class="text-center text-gray-500 dark:text-gray-400 p-10 bg-white dark:bg-gray-800 rounded-2xl shadow-md" data-lang-key="history.noHistoryToday">
+                        <div id="no-history" class="text-center text-gray-500 dark:text-gray-400 p-10 bg-white dark:bg-gray-800 rounded-2xl shadow-md">
                             Сегодня операций не было.
                         </div>
                         <!-- Список транзакций будет добавлен JS -->
@@ -614,8 +576,7 @@
             query as dbQuery, // Переименовываем, чтобы не конфликтовать с query Firestore (хотя мы его удалили)
             orderByChild,
             equalTo,
-            get, // <-- ИСПРАВЛЕНИЕ: Добавлен get
-            update // <-- НОВОЕ: Для drag-n-drop
+            get // <-- ИСПРАВЛЕНИЕ: Добавлен get
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         // --- 0. КОНФИГУРАЦИЯ FIREBASE (ВАЖНО!) ---
@@ -642,7 +603,6 @@
         // --- Инициализация ---
         let app, auth, db; // db теперь это Realtime Database
         let currentUserId = null;
-        let currentLang = 'ru'; // Язык по умолчанию
         
         // Глобальные состояния
         let allTransactions = [];
@@ -663,313 +623,6 @@
             minimumFractionDigits: 0,
             maximumFractionDigits: 2
         });
-        
-        // --- НОВОЕ: Словарь локализации ---
-        const translations = {
-            ru: {
-                "auth.login": "Вход",
-                "auth.register": "Регистрация",
-                "auth.email": "Email",
-                "auth.password": "Пароль",
-                "auth.passwordPlaceholder": "Мин. 6 символов",
-                "auth.loginButton": "Войти",
-                "auth.registerButton": "Создать аккаунт",
-                "auth.error.invalid-email": "Неверный формат Email.",
-                "auth.error.user-not-found": "Пользователь не найден.",
-                "auth.error.wrong-password": "Неверный пароль.",
-                "auth.error.email-already-in-use": "Этот Email уже используется.",
-                "auth.error.weak-password": "Пароль слишком слабый (мин. 6 символов).",
-                "auth.error.invalid-credential": "Неверный Email или пароль.",
-                "auth.error.default": "Произошла ошибка. Попробуйте снова.",
-                "dashboard.title": "MyFin",
-                "dashboard.totalBalance": "Общий баланс",
-                "dashboard.savings": "Сбережения",
-                "dashboard.income": "Доход",
-                "dashboard.expense": "Расход",
-                "accounts.title": "Счета",
-                "accounts.new": "+ Новый счет",
-                "accounts.noAccounts": "У вас пока нет счетов.",
-                "accounts.balance": "Баланс",
-                "accounts.deleted": "Счет удален",
-                "loans.title": "Кредиты",
-                "loans.new": "+ Новый кредит",
-                "loans.totalDebt": "Общий долг:",
-                "loans.noLoans": "У вас нет активных кредитов.",
-                "loans.statusTitle": "Статус по кредитам",
-                "loans.paid": "Оплачено",
-                "loans.total": "Всего",
-                "loans.monthlyPayment": "Ежемес. платеж:",
-                "loans.remainingMonths": "{{months}} мес. осталось",
-                "loans.paidOff": "Выплачено",
-                "loans.paymentDate": "Платеж до {{date}} числа",
-                "history.today": "История (Сегодня)",
-                "history.all": "Все",
-                "history.allTitle": "Вся история",
-                "history.noHistoryToday": "Сегодня операций не было.",
-                "history.noHistory": "История операций пуста.",
-                "history.transferTo": "Перевод на \"{{accountName}}\"",
-                "settings.title": "Настройки",
-                "settings.budgetModel": "Модель Управления",
-                "settings.modelNone": "Не выбрана",
-                "settings.modelSelectPrompt": "Выберите модель, чтобы увидеть распределение.",
-                "settings.modelSelectPromptShort": "Выберите модель бюджета в настройках",
-                "settings.language": "Язык",
-                "settings.loggedInAs": "Вы вошли как:",
-                "settings.logout": "Выйти",
-                "forms.newIncome": "Новый Доход",
-                "forms.newExpense": "Новый Расход",
-                "forms.addIncomeButton": "Добавить Доход",
-                "forms.addExpenseButton": "Добавить Расход",
-                "forms.description": "Описание",
-                "forms.descriptionPlaceholder": "Напр., Покупка в Magnum",
-                "forms.amount": "Сумма (₸)",
-                "forms.account": "Счет",
-                "forms.accountFrom": "Счет (Откуда)",
-                "forms.category": "Категория",
-                "forms.whichLoan": "Какой кредит оплачиваете?",
-                "forms.whichSavingsAccount": "На какой сберегательный счет?",
-                "forms.newAccountTitle": "Новый счет",
-                "forms.accountType": "Тип счета",
-                "forms.selectBank": "Выберите банк",
-                "forms.accountName": "Название",
-                "forms.accountNamePlaceholder": "Напр., Kaspi Bank",
-                "forms.currentBalance": "Текущий баланс (₸)",
-                "forms.cardColor": "Цвет карты",
-                "forms.addAccountButton": "Добавить счет",
-                "forms.newLoanTitle": "Новый кредит",
-                "forms.loanName": "Название",
-                "forms.loanNamePlaceholder": "Напр., Автокредит",
-                "forms.loanTotalAmount": "Общая сумма (₸)",
-                "forms.loanPaidAmount": "Уже оплачено (₸)",
-                "forms.loanMonthlyPayment": "Ежемесячный платеж (₸)",
-                "forms.loanPaymentDate": "Число ежемесячного платежа",
-                "forms.addLoanButton": "Добавить кредит",
-                "forms.noAccountFirst": "Сначала добавьте счет",
-                "forms.noActiveLoans": "Нет активных кредитов",
-                "forms.selectLoan": "Выберите кредит...",
-                "forms.noSavingsAccounts": "Нет сберегательных счетов",
-                "forms.selectAccount": "Выберите счет...",
-                "forms.fillAllFields": "Пожалуйста, заполните все поля.",
-                "forms.selectSavingsAccount": "Пожалуйста, выберите сберегательный счет.",
-                "forms.noSameAccountTransfer": "Нельзя перевести деньги на тот же счет.",
-                "toast.accountAdded": "Счет успешно добавлен!",
-                "toast.accountAddError": "Ошибка добавления счета.",
-                "toast.loanAdded": "Кредит успешно добавлен!",
-                "toast.loanAddError": "Ошибка добавления кредита.",
-                "toast.transactionAdded": "Транзакция ({{type}}) добавлена!",
-                "toast.transactionType.income": "Доход",
-                "toast.transactionType.expense": "Расход",
-                "toast.transactionAddError": "Ошибка добавления транзакции.",
-                "toast.deleteAccountError": "Нельзя удалить счет, к которому привязаны транзакции.",
-                "toast.accountDeleted": "Счет успешно удален.",
-                "toast.deleteAccountErrorGeneric": "Ошибка удаления счета.",
-                "toast.deleteLoanError": "Нельзя удалить кредит, по которому были платежи.",
-                "toast.loanDeleted": "Кредит успешно удален.",
-                "toast.deleteLoanErrorGeneric": "Ошибка удаления кредита.",
-                "toast.logoutError": "Ошибка при выходе.",
-                "toast.orderSaved": "Порядок счетов сохранен!",
-                "toast.orderSaveError": "Ошибка сохранения порядка.",
-                "accountTypes.bank": "Банк",
-                "accountTypes.deposit": "Депозит",
-                "accountTypes.savings": "Сбережение",
-                "accountTypes.cash": "Наличный",
-                "accountTypes.defaultSavings": "Сберегательный счет",
-                "categories.model.50-30-20.needs": "Нужды (50%)",
-                "categories.model.50-30-20.wants": "Желания (30%)",
-                "categories.model.50-30-20.savings": "Сбережения (20% - Перевод)",
-                "categories.model.80-20.expenses": "Расходы (80%)",
-                "categories.model.80-20.savings": "Сбережения (20% - Перевод)",
-                "categories.model.none.needs": "Нужды",
-                "categories.model.none.wants": "Желания",
-                "categories.model.none.savings": "Сбережения (Перевод)",
-                "categories.loan": "Оплата кредита",
-                "categories.other": "Другое",
-                "budgetModel.income": "Месячный доход: {{amount}}",
-                "budgetModel.needs": "Нужды (50%)",
-                "budgetModel.wants": "Желания (30%)",
-                "budgetModel.savings": "Сбережения (20%)",
-                "budgetModel.expenses": "Расходы (80%)",
-                "budgetModel.savings_80": "Сбережения (20%)",
-                "loanStatus.paid": "Оплачено в этом месяце",
-                "loanStatus.overdue": "ПЛАТЕЖ ПРОСРОЧЕН!",
-                "loanStatus.dueSoon": "Срок оплаты через {{days}} дн.",
-                "loanStatus.due": "Оплата до {{date}} числа"
-            },
-            kk: {
-                "auth.login": "Кіру",
-                "auth.register": "Тіркелу",
-                "auth.email": "Email",
-                "auth.password": "Құпия сөз",
-                "auth.passwordPlaceholder": "Кемі 6 таңба",
-                "auth.loginButton": "Кіру",
-                "auth.registerButton": "Аккаунт құру",
-                "auth.error.invalid-email": "Email пішімі қате.",
-                "auth.error.user-not-found": "Пайдаланушы табылмады.",
-                "auth.error.wrong-password": "Құпия сөз қате.",
-                "auth.error.email-already-in-use": "Бұл Email бұрыннан қолданыста.",
-                "auth.error.weak-password": "Құпия сөз тым әлсіз (кемі 6 таңба).",
-                "auth.error.invalid-credential": "Email немесе құпия сөз қате.",
-                "auth.error.default": "Қате орын алды. Қайталап көріңіз.",
-                "dashboard.title": "MyFin",
-                "dashboard.totalBalance": "Жалпы баланс",
-                "dashboard.savings": "Жинақтар",
-                "dashboard.income": "Кіріс",
-                "dashboard.expense": "Шығыс",
-                "accounts.title": "Шоттар",
-                "accounts.new": "+ Жаңа шот",
-                "accounts.noAccounts": "Сізде әзірге шоттар жоқ.",
-                "accounts.balance": "Баланс",
-                "accounts.deleted": "Шот жойылды",
-                "loans.title": "Несиелер",
-                "loans.new": "+ Жаңа несие",
-                "loans.totalDebt": "Жалпы қарыз:",
-                "loans.noLoans": "Сізде белсенді несиелер жоқ.",
-                "loans.statusTitle": "Несие статусы",
-                "loans.paid": "Төленді",
-                "loans.total": "Барлығы",
-                "loans.monthlyPayment": "Айлық төлем:",
-                "loans.remainingMonths": "{{months}} ай қалды",
-                "loans.paidOff": "Төленіп бітті",
-                "loans.paymentDate": "{{date}} дейін төлем",
-                "history.today": "Тарих (Бүгін)",
-                "history.all": "Барлығы",
-                "history.allTitle": "Барлық тарих",
-                "history.noHistoryToday": "Бүгін операциялар болмады.",
-                "history.noHistory": "Операциялар тарихы бос.",
-                "history.transferTo": "\"{{accountName}}\" шотына аударым",
-                "settings.title": "Баптаулар",
-                "settings.budgetModel": "Басқару моделі",
-                "settings.modelNone": "Таңдалмады",
-                "settings.modelSelectPrompt": "Бөлінуді көру үшін үлгіні таңдаңыз.",
-                "settings.modelSelectPromptShort": "Баптаулардан бюджет үлгісін таңдаңыз",
-                "settings.language": "Тіл",
-                "settings.loggedInAs": "Сіз осы аккаунтпен кірдіңіз:",
-                "settings.logout": "Шығу",
-                "forms.newIncome": "Жаңа Кіріс",
-                "forms.newExpense": "Жаңа Шығыс",
-                "forms.addIncomeButton": "Кіріс қосу",
-                "forms.addExpenseButton": "Шығыс қосу",
-                "forms.description": "Сипаттамасы",
-                "forms.descriptionPlaceholder": "Мыс., Magnum-дағы сауда",
-                "forms.amount": "Сома (₸)",
-                "forms.account": "Шот",
-                "forms.accountFrom": "Шот (Қайдан)",
-                "forms.category": "Санат",
-                "forms.whichLoan": "Қай несиені төлейсіз?",
-                "forms.whichSavingsAccount": "Қай жинақ шотына?",
-                "forms.newAccountTitle": "Жаңа шот",
-                "forms.accountType": "Шот түрі",
-                "forms.selectBank": "Банкті таңдаңыз",
-                "forms.accountName": "Атауы",
-                "forms.accountNamePlaceholder": "Мыс., Kaspi Bank",
-                "forms.currentBalance": "Ағымдағы баланс (₸)",
-                "forms.cardColor": "Карта түсі",
-                "forms.addAccountButton": "Шот қосу",
-                "forms.newLoanTitle": "Жаңа несие",
-                "forms.loanName": "Атауы",
-                "forms.loanNamePlaceholder": "Мыс., Автонесие",
-                "forms.loanTotalAmount": "Жалпы сома (₸)",
-                "forms.loanPaidAmount": "Төленгені (₸)",
-                "forms.loanMonthlyPayment": "Айлық төлем (₸)",
-                "forms.loanPaymentDate": "Ай сайынғы төлем күні",
-                "forms.addLoanButton": "Несие қосу",
-                "forms.noAccountFirst": "Алдымен шот қосыңыз",
-                "forms.noActiveLoans": "Белсенді несиелер жоқ",
-                "forms.selectLoan": "Несиені таңдаңыз...",
-                "forms.noSavingsAccounts": "Жинақ шоттары жоқ",
-                "forms.selectAccount": "Шотты таңдаңыз...",
-                "forms.fillAllFields": "Барлық өрістерді толтырыңыз.",
-                "forms.selectSavingsAccount": "Жинақ шотын таңдаңыз.",
-                "forms.noSameAccountTransfer": "Ақшаны бір шотқа аудару мүмкін емес.",
-                "toast.accountAdded": "Шот сәтті қосылды!",
-                "toast.accountAddError": "Шотты қосу қатесі.",
-                "toast.loanAdded": "Несие сәтті қосылды!",
-                "toast.loanAddError": "Несиені қосу қатесі.",
-                "toast.transactionAdded": "Транзакция ({{type}}) қосылды!",
-                "toast.transactionType.income": "Кіріс",
-                "toast.transactionType.expense": "Шығыс",
-                "toast.transactionAddError": "Транзакцияны қосу қатесі.",
-                "toast.deleteAccountError": "Транзакциялары бар шотты жою мүмкін емес.",
-                "toast.accountDeleted": "Шот сәтті жойылды.",
-                "toast.deleteAccountErrorGeneric": "Шотты жою қатесі.",
-                "toast.deleteLoanError": "Төлемдері бар несиені жою мүмкін емес.",
-                "toast.loanDeleted": "Несие сәтті жойылды.",
-                "toast.deleteLoanErrorGeneric": "Несиені жою қатесі.",
-                "toast.logoutError": "Шығу кезінде қате.",
-                "toast.orderSaved": "Шоттардың реті сақталды!",
-                "toast.orderSaveError": "Ретті сақтау қатесі.",
-                "accountTypes.bank": "Банк",
-                "accountTypes.deposit": "Депозит",
-                "accountTypes.savings": "Жинақ",
-                "accountTypes.cash": "Қолма-қол",
-                "accountTypes.defaultSavings": "Жинақ шоты",
-                "categories.model.50-30-20.needs": "Қажеттіліктер (50%)",
-                "categories.model.50-30-20.wants": "Қалаулар (30%)",
-                "categories.model.50-30-20.savings": "Жинақ (20% - Аударым)",
-                "categories.model.80-20.expenses": "Шығыстар (80%)",
-                "categories.model.80-20.savings": "Жинақ (20% - Аударым)",
-                "categories.model.none.needs": "Қажеттіліктер",
-                "categories.model.none.wants": "Қалаулар",
-                "categories.model.none.savings": "Жинақ (Аударым)",
-                "categories.loan": "Несие төлемі",
-                "categories.other": "Басқа",
-                "budgetModel.income": "Айлық табыс: {{amount}}",
-                "budgetModel.needs": "Қажеттіліктер (50%)",
-                "budgetModel.wants": "Қалаулар (30%)",
-                "budgetModel.savings": "Жинақ (20%)",
-                "budgetModel.expenses": "Шығыстар (80%)",
-                "budgetModel.savings_80": "Жинақ (20%)",
-                "loanStatus.paid": "Осы айда төленді",
-                "loanStatus.overdue": "ТӨЛЕМ МЕРЗІМІ ӨТІП КЕТТІ!",
-                "loanStatus.dueSoon": "Төлем {{days}} күннен кейін.",
-                "loanStatus.due": "{{date}} дейін төлеу"
-            }
-        };
-
-        // НОВЫЕ Функции локализации
-        function t(key, replacements = {}) {
-            let text = translations[currentLang][key] || key;
-            for (const rKey in replacements) {
-                text = text.replace(`{{${rKey}}}`, replacements[rKey]);
-            }
-            return text;
-        }
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('appLanguage', lang);
-            document.documentElement.lang = lang;
-            
-            // Update buttons
-            document.getElementById('lang-ru').dataset.active = lang === 'ru';
-            document.getElementById('lang-kk').dataset.active = lang === 'kk';
-
-            // Update static text
-            document.querySelectorAll('[data-lang-key]').forEach(el => {
-                el.textContent = t(el.dataset.langKey);
-            });
-            // Update placeholders
-            document.querySelectorAll('[data-lang-key-placeholder]').forEach(el => {
-                el.placeholder = t(el.dataset.langKeyPlaceholder);
-            });
-            
-            // Re-render all dynamic content
-            if (currentUserId) {
-                renderAccounts();
-                renderLoans();
-                renderHistory();
-                renderAllHistory();
-                renderBudgetModels();
-                renderLoanStatus();
-                updateBalances();
-                populateAccountSelect();
-                populateCategories();
-            }
-            // Update auth error messages if visible
-            if (!currentUserId) {
-                authError.textContent = authError.dataset.lastErrorKey ? t(authError.dataset.lastErrorKey) : '';
-            }
-        }
         
         // Элементы DOM
         const authContainer = document.getElementById('auth-container');
@@ -1036,9 +689,6 @@
         const historyModal = document.getElementById('history-modal');
         const closeHistoryModal = document.getElementById('close-history-modal');
         const allHistoryContent = document.getElementById('all-history-content');
-        const langBtnRu = document.getElementById('lang-ru');
-        const langBtnKk = document.getElementById('lang-kk');
-        const toggleLoanStatusBtn = document.getElementById('toggle-loan-status');
         
         // --- 1. Инициализация Firebase и Аутентификация ---
         
@@ -1077,28 +727,8 @@
                 transactionCategory.addEventListener('change', handleCategoryChange);
                 budgetModelSelect.addEventListener('change', renderBudgetModels);
 
-                // --- НОВЫЕ слушатели ---
-                langBtnRu.addEventListener('click', () => setLanguage('ru'));
-                langBtnKk.addEventListener('click', () => setLanguage('kk'));
-                toggleLoanStatusBtn.addEventListener('click', toggleLoanStatusVisibility);
-                
-                // Drag-n-Drop
-                // accountsSlider.addEventListener('dragstart', handleDragStart);
-                // accountsSlider.addEventListener('dragover', handleDragOver);
-                // accountsSlider.addEventListener('dragleave', handleDragLeave);
-                // accountsSlider.addEventListener('drop', handleDrop);
-                // accountsSlider.addEventListener('dragend', handleDragEnd);
-
-                // НОВОЕ: Drag-n-Drop (Touch)
-                accountsSlider.addEventListener('touchstart', handleTouchStart, { passive: false });
-                accountsSlider.addEventListener('touchmove', handleTouchMove, { passive: false });
-                accountsSlider.addEventListener('touchend', handleTouchEnd);
-
                 // Запускаем главный процесс аутентификации
                 setupAuthListener();
-                
-                // Устанавливаем язык из localStorage
-                setLanguage(localStorage.getItem('appLanguage') || 'ru');
 
             } catch (error) {
                 console.error("Ошибка инициализации Firebase:", error);
@@ -1152,7 +782,7 @@
             accountsListener = onValue(accountsRef, (snapshot) => {
                 const data = snapshot.val() || {};
                 allAccounts = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-                allAccounts.sort((a, b) => (a.order || 0) - (b.order || 0)); // Сортируем по 'order'
+                allAccounts.sort((a, b) => a.createdAt - b.createdAt); // Сортируем по дате создания
                 renderAccounts();
                 updateBalances();
                 populateAccountSelect();
@@ -1180,7 +810,6 @@
                 renderAllHistory(); // Рендер "Всей истории" в модалке
                 updateBalances(); // Обновляем балансы
                 renderBudgetModels(); // Обновляем модели
-                renderLoans(); // <-- НОВОЕ: Пересчитываем общий долг
                 renderLoanStatus(); // Обновляем статус кредитов
             }, (error) => console.error("Ошибка загрузки транзакций:", error));
         }
@@ -1209,7 +838,7 @@
             renderLoanStatus();
             
             // Сбрасываем drawer
-            drawerModelDisplay.innerHTML = `<p class="text-gray-500 dark:text-gray-400" data-lang-key="settings.modelSelectPrompt">${t('settings.modelSelectPrompt')}</p>`;
+            drawerModelDisplay.innerHTML = '<p class="text-gray-500 dark:text-gray-400">Выберите модель, чтобы увидеть распределение.</p>';
             budgetModelSelect.value = 'none';
         }
 
@@ -1245,7 +874,6 @@
         
         function toggleAuthTabs(showLogin) {
             authError.textContent = ''; // Очищаем ошибки
-            authError.dataset.lastErrorKey = '';
             if (showLogin) {
                 authTabLogin.classList.add('border-blue-600', 'dark:border-blue-400', 'text-blue-600', 'dark:text-blue-400');
                 authTabLogin.classList.remove('text-gray-500', 'dark:text-gray-400');
@@ -1264,22 +892,6 @@
 
                 authFormLogin.classList.add('hidden');
                 authFormRegister.classList.remove('hidden');
-            }
-        }
-
-        // --- НОВАЯ ФУНКЦИЯ: Показать/Скрыть Статус Кредитов ---
-        function toggleLoanStatusVisibility() {
-            const content = document.getElementById('loan-status-content');
-            const icon = toggleLoanStatusBtn.querySelector('i');
-            content.classList.toggle('hidden');
-            if (content.classList.contains('hidden')) {
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-                localStorage.setItem('loanStatusHidden', 'true');
-            } else {
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-                localStorage.removeItem('loanStatusHidden');
             }
         }
 
@@ -1312,10 +924,7 @@
             allAccounts.forEach(account => {
                 const card = document.createElement('div');
                 const colorClass = account.color || 'from-gray-500 to-gray-700';
-                card.className = `slider-item bg-gradient-to-br ${colorClass} p-5 rounded-2xl shadow-lg text-white flex flex-col justify-between h-48 relative overflow-hidden cursor-grab`;
-                card.draggable = true; // <-- НОВОЕ: Drag-n-Drop
-                card.dataset.accountId = account.id; // <-- НОВОЕ: Drag-n-Drop
-
+                card.className = `slider-item bg-gradient-to-br ${colorClass} p-5 rounded-2xl shadow-lg text-white flex flex-col justify-between h-48 relative overflow-hidden`;
                 let logoHtml = '';
                 if (account.logoUrl) {
                     logoHtml = `
@@ -1324,18 +933,18 @@
                                  onerror="this.parentElement.innerHTML = '${account.name.charAt(0)}'; this.parentElement.classList.add('logo-fallback');">
                         </div>`;
                 }
-                const typeText = { bank: t('accountTypes.bank'), deposit: t('accountTypes.deposit'), savings: t('accountTypes.savings'), cash: t('accountTypes.cash') };
+                const typeText = { bank: 'Банк', deposit: 'Депозит', savings: 'Сбережение', cash: 'Наличный' };
                 card.innerHTML = `
                     ${logoHtml}
                     <button class="delete-account-btn absolute top-2 right-2 w-7 h-7 bg-black bg-opacity-20 rounded-full text-white text-xs hover:bg-opacity-40 z-10">
                         <i class="fas fa-times"></i>
                     </button>
                     <div class="z-0">
-                        <span class="block text-sm font-medium opacity-80 ${account.logoUrl ? 'text-right' : ''}">${typeText[account.type] || t('forms.account')}</span>
+                        <span class="block text-sm font-medium opacity-80 ${account.logoUrl ? 'text-right' : ''}">${typeText[account.type] || 'Счет'}</span>
                         <span class="block text-lg font-semibold truncate ${account.logoUrl ? 'text-right' : ''}">${account.name}</span>
                     </div>
                     <div class="z-0">
-                        <span class="block text-xs opacity-80" data-lang-key="accounts.balance">${t('accounts.balance')}</span>
+                        <span class="block text-xs opacity-80">Баланс</span>
                         <p class="text-3xl font-bold truncate">${formatter.format(account.balance)}</p>
                     </div>
                 `;
@@ -1349,10 +958,6 @@
         
         // Рендер Слайдера Кредитов
         function renderLoans() {
-            // НОВОЕ: Рассчитываем общий долг
-            const totalDebt = allLoans.reduce((acc, loan) => acc + (loan.totalAmount - loan.paidAmount), 0);
-            document.getElementById('total-loan-balance').textContent = formatter.format(Math.max(0, totalDebt));
-            
             if (allLoans.length === 0) {
                 noLoansEl.classList.remove('hidden');
                 loansSlider.innerHTML = '';
@@ -1366,17 +971,17 @@
                 const progress = (loan.paidAmount / loan.totalAmount) * 100;
                 const remainingAmount = loan.totalAmount - loan.paidAmount;
                 const remainingMonths = (loan.monthlyPayment > 0) ? Math.ceil(remainingAmount / loan.monthlyPayment) : 0;
-                const monthsText = (remainingAmount <= 0) ? t('loans.paidOff') : (remainingMonths > 0 ? t('loans.remainingMonths', {months: remainingMonths}) : 'N/A');
+                const monthsText = (remainingMonths > 0) ? `${remainingMonths} мес. осталось` : 'Выплачено';
                 card.className = 'slider-item bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md flex flex-col justify-between h-60 relative';
                 card.innerHTML = `
                     <button class="delete-loan-btn absolute top-2 right-2 w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-500 dark:text-gray-400 text-xs hover:bg-gray-200 dark:hover:bg-gray-600 z-10">
                         <i class="fas fa-times"></i>
                     </button>
                     <div>
-                        <span class="block text-sm font-medium text-gray-500 dark:text-gray-400" data-lang-key="loans.title">${t('loans.title')}</span>
+                        <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Кредит</span>
                         <span class="block text-lg font-semibold truncate text-gray-900 dark:text-white">${loan.name}</span>
                         <span class="block text-sm font-medium text-gray-500 dark:text-gray-400 mt-1">
-                            ${t('loans.paymentDate', {date: loan.paymentDate})}
+                            Платеж до ${loan.paymentDate} числа
                         </span>
                     </div>
                     <div>
@@ -1384,16 +989,16 @@
                             <div class="bg-blue-600 h-2 rounded-full" style="width: ${progress}%"></div>
                         </div>
                         <div class="flex justify-between text-sm mb-2">
-                            <span class="text-gray-600 dark:text-gray-300" data-lang-key="loans.paid">${t('loans.paid')}</span>
+                            <span class="text-gray-600 dark:text-gray-300">Оплачено</span>
                             <span class="font-semibold text-gray-900 dark:text-white">${formatter.format(loan.paidAmount)}</span>
                         </div>
                         <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400">
-                            <span data-lang-key="loans.total">${t('loans.total')}</span>
+                            <span>Всего</span>
                             <span>${formatter.format(loan.totalAmount)}</span>
                         </div>
                     </div>
                     <div class="flex justify-between items-center mt-2 pt-2 border-t dark:border-gray-700">
-                        <span class="text-sm text-gray-600 dark:text-gray-300"><span data-lang-key="loans.monthlyPayment">${t('loans.monthlyPayment')}</span> <br> <strong class="text-base text-gray-900 dark:text-white">${formatter.format(loan.monthlyPayment)}</strong></span>
+                        <span class="text-sm text-gray-600 dark:text-gray-300">Ежемес. платеж: <br> <strong class="text-base text-gray-900 dark:text-white">${formatter.format(loan.monthlyPayment)}</strong></span>
                         <span class="text-sm font-semibold text-blue-600 dark:text-blue-400">${monthsText}</span>
                     </div>
                 `;
@@ -1424,7 +1029,7 @@
         // Рендер Модального Окна "Вся История"
         function renderAllHistory() {
             if (allTransactions.length === 0) {
-                allHistoryContent.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 p-10" data-lang-key="history.noHistory">${t('history.noHistory')}</p>`;
+                allHistoryContent.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400 p-10">История операций пуста.</p>`;
                 return;
             }
             allHistoryContent.innerHTML = '';
@@ -1464,7 +1069,7 @@
             const isSavings = trans.category === 'savings-503020' || trans.category === 'savings-8020' || trans.category === 'savings';
             if (isSavings) {
                 const toAccount = allAccounts.find(a => a.id === trans.toAccountId);
-                description = t('history.transferTo', { accountName: toAccount ? toAccount.name : t('dashboard.savings') });
+                description = `Перевод на "${toAccount ? toAccount.name : 'Сбережения'}"`;
                 icon = 'fa-exchange-alt text-blue-500';
                 iconBg = 'bg-blue-100 dark:bg-blue-800';
             }
@@ -1476,7 +1081,7 @@
                     </div>
                     <div>
                         <p class="font-semibold text-gray-900 dark:text-white truncate max-w-[150px] sm:max-w-xs">${description}</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">${account ? account.name : t('accounts.deleted')} | ${new Date(trans.createdAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${account ? account.name : 'Счет удален'} | ${new Date(trans.createdAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -1492,9 +1097,9 @@
         function renderBudgetModels() {
             currentBudgetModel = budgetModelSelect.value;
             if (currentBudgetModel === 'none') {
-                const msg = `<p class="text-gray-500 dark:text-gray-400" data-lang-key="settings.modelSelectPrompt">${t('settings.modelSelectPrompt')}</p>`;
+                const msg = '<p class="text-gray-500 dark:text-gray-400">Выберите модель, чтобы увидеть распределение.</p>';
                 drawerModelDisplay.innerHTML = msg;
-                mainModelDisplay.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400" data-lang-key="settings.modelSelectPromptShort">${t('settings.modelSelectPromptShort')}</p>`;
+                mainModelDisplay.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Выберите модель бюджета в настройках</p>`;
                 return;
             }
             const now = new Date();
@@ -1520,10 +1125,10 @@
                 const totalWants = (expensesByCategory['wants-503020'] || 0) + (expensesByCategory['wants'] || 0);
                 const totalSavings = (expensesByCategory['savings-503020'] || 0) + (expensesByCategory['savings'] || 0);
                 modelHtml = `
-                    <h4 class="font-semibold text-gray-700 dark:text-gray-300">${t('budgetModel.income', {amount: formatter.format(totalIncome)})}</h4>
-                    ${createProgressBar(t('budgetModel.needs'), totalNeeds, needsLimit)}
-                    ${createProgressBar(t('budgetModel.wants'), totalWants, wantsLimit)}
-                    ${createProgressBar(t('budgetModel.savings'), totalSavings, savingsLimit)}
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300">Месячный доход: ${formatter.format(totalIncome)}</h4>
+                    ${createProgressBar('Нужды (50%)', totalNeeds, needsLimit)}
+                    ${createProgressBar('Желания (30%)', totalWants, wantsLimit)}
+                    ${createProgressBar('Сбережения (20%)', totalSavings, savingsLimit)}
                 `;
             } else if (currentBudgetModel === '80-20') {
                 const expensesLimit = totalIncome * 0.8;
@@ -1531,9 +1136,9 @@
                 const totalExpenses = (expensesByCategory['expenses-8020'] || 0) + (expensesByCategory['needs'] || 0) + (expensesByCategory['wants'] || 0) + (expensesByCategory['loan'] || 0) + (expensesByCategory['other'] || 0);
                 const totalSavings = (expensesByCategory['savings-8020'] || 0) + (expensesByCategory['savings'] || 0);
                 modelHtml = `
-                    <h4 class="font-semibold text-gray-700 dark:text-gray-300">${t('budgetModel.income', {amount: formatter.format(totalIncome)})}</h4>
-                    ${createProgressBar(t('budgetModel.expenses'), totalExpenses, expensesLimit)}
-                    ${createProgressBar(t('budgetModel.savings_80'), totalSavings, savingsLimit)}
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300">Месячный доход: ${formatter.format(totalIncome)}</h4>
+                    ${createProgressBar('Расходы (80%)', totalExpenses, expensesLimit)}
+                    ${createProgressBar('Сбережения (20%)', totalSavings, savingsLimit)}
                 `;
             }
             drawerModelDisplay.innerHTML = modelHtml;
@@ -1563,44 +1168,11 @@
         
         // Рендер виджета Статуса Кредитов
         function renderLoanStatus() {
-            const content = document.getElementById('loan-status-content');
-            const icon = toggleLoanStatusBtn.querySelector('i');
-            
             if (allLoans.length === 0) {
-                loanStatusWidget.innerHTML = ''; // Очищаем все, включая заголовок
+                loanStatusWidget.innerHTML = '';
                 return;
             }
-            
-            // Если виджет был пуст, восстанавливаем его структуру
-            if (!loanStatusWidget.innerHTML) {
-                 loanStatusWidget.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white" data-lang-key="loans.statusTitle">${t('loans.statusTitle')}</h3>
-                        <button id="toggle-loan-status" class="text-blue-600 dark:text-blue-400 text-sm p-1">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div id="loan-status-content" class="space-y-3">
-                    </div>`;
-                // Снова находим элементы, т.к. мы их пересоздали
-                document.getElementById('toggle-loan-status').addEventListener('click', toggleLoanStatusVisibility);
-            }
-
-            const statusContent = document.getElementById('loan-status-content');
-            const statusIcon = document.querySelector('#toggle-loan-status i');
-            statusContent.innerHTML = ''; // Очищаем только контент
-            
-            // Применяем сохраненное состояние видимости
-            if (localStorage.getItem('loanStatusHidden') === 'true') {
-                statusContent.classList.add('hidden');
-                statusIcon.classList.remove('fa-eye');
-                statusIcon.classList.add('fa-eye-slash');
-            } else {
-                statusContent.classList.remove('hidden');
-                statusIcon.classList.remove('fa-eye-slash');
-                statusIcon.classList.add('fa-eye');
-            }
-
+            loanStatusWidget.innerHTML = '<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Статус по кредитам</h3>';
             const now = new Date();
             const today = now.getDate();
             const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
@@ -1611,11 +1183,11 @@
                 let statusText = '';
                 let statusColor = 'text-gray-500 dark:text-gray-400';
                 let statusIcon = 'fa-clock';
-                if (hasPaid) { statusText = t('loanStatus.paid'); statusColor = 'text-green-600 dark:text-green-500'; statusIcon = 'fa-check-circle'; }
-                else if (today > paymentDate) { statusText = t('loanStatus.overdue'); statusColor = 'text-red-600 dark:text-red-500'; statusIcon = 'fa-exclamation-circle'; }
-                else if (paymentDate - today <= 5) { statusText = t('loanStatus.dueSoon', {days: paymentDate - today}); statusColor = 'text-yellow-600 dark:text-yellow-500'; statusIcon = 'fa-hourglass-half'; }
-                else { statusText = t('loanStatus.due', {date: paymentDate}); }
-                statusContent.innerHTML += `
+                if (hasPaid) { statusText = 'Оплачено в этом месяце'; statusColor = 'text-green-600 dark:text-green-500'; statusIcon = 'fa-check-circle'; }
+                else if (today > paymentDate) { statusText = 'ПЛАТЕЖ ПРОСРОЧЕН!'; statusColor = 'text-red-600 dark:text-red-500'; statusIcon = 'fa-exclamation-circle'; }
+                else if (paymentDate - today <= 5) { statusText = `Срок оплаты через ${paymentDate - today} дн.`; statusColor = 'text-yellow-600 dark:text-yellow-500'; statusIcon = 'fa-hourglass-half'; }
+                else { statusText = `Оплата до ${paymentDate} числа`; }
+                loanStatusWidget.innerHTML += `
                     <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md flex justify-between items-center">
                         <div>
                             <p class="font-semibold text-gray-900 dark:text-white">${loan.name}</p>
@@ -1629,6 +1201,11 @@
             });
         }
         
+        // --- 5. Логика отправки форм ---
+        
+        // --- ИЗМЕНЕНО: ЛОГИКА REALTIME DATABASE ---
+        
+        // Добавление Счета
         async function handleAccountSubmit(e) {
             e.preventDefault();
             if (!currentUserId) return;
@@ -1639,12 +1216,12 @@
             const logoUrl = document.getElementById('account-logo-url').value;
             try {
                 const newAccRef = push(ref(db, `users/${currentUserId}/accounts`));
-                await set(newAccRef, { name, balance, type, color, logoUrl, createdAt: serverTimestamp(), order: allAccounts.length }); // <-- НОВОЕ: order
+                await set(newAccRef, { name, balance, type, color, logoUrl, createdAt: serverTimestamp() });
                 toggleModal('account-modal', false);
                 accountForm.reset();
                 setupAccountModalUI();
-                showToast(t('toast.accountAdded'));
-            } catch (error) { console.error("Ошибка добавления счета:", error); showToast(t('toast.accountAddError'), true); }
+                showToast('Счет успешно добавлен!');
+            } catch (error) { console.error("Ошибка добавления счета:", error); showToast('Ошибка добавления счета.', true); }
         }
         
         // Добавление Кредита
@@ -1680,9 +1257,9 @@
             const isSavings = category === 'savings-503020' || category === 'savings-8020' || category === 'savings';
             const toAccountId = (isSavings) ? transactionSavingsSelect.value : null;
             
-            if (!type || !description || isNaN(amount) || !accountId) { showToast(t('forms.fillAllFields'), true); return; }
-            if (isSavings && !toAccountId) { showToast(t('forms.selectSavingsAccount'), true); return; }
-            if (isSavings && toAccountId === accountId) { showToast(t('forms.noSameAccountTransfer'), true); return; }
+            if (!type || !description || isNaN(amount) || !accountId) { showToast('Пожалуйста, заполните все поля.', true); return; }
+            if (isSavings && !toAccountId) { showToast('Пожалуйста, выберите сберегательный счет.', true); return; }
+            if (isSavings && toAccountId === accountId) { showToast('Нельзя перевести деньги на тот же счет.', true); return; }
             
             try {
                 // 1. Добавляем транзакцию
@@ -1716,8 +1293,8 @@
                 transactionForm.reset();
                 loanPaymentContainer.classList.add('hidden');
                 savingsTransferContainer.classList.add('hidden');
-                showToast(t('toast.transactionAdded', {type: isIncome ? t('toast.transactionType.income') : t('toast.transactionType.expense')}));
-            } catch (error) { console.error("Ошибка добавления транзакции:", error); showToast(t('toast.transactionAddError'), true); }
+                showToast(`Транзакция (${type === 'income' ? 'Доход' : 'Расход'}) добавлена!`);
+            } catch (error) { console.error("Ошибка добавления транзакции:", error); showToast('Ошибка добавления транзакции.', true); }
         }
         
         // --- 6. Логика Удаления ---
@@ -1741,7 +1318,7 @@
                 
                  if (transSnapshotFrom.exists() || transSnapshotTo.exists()) {
                     // НЕЛЬЗЯ УДАЛЯТЬ
-                    showToast(t('toast.deleteAccountError'), true);
+                    showToast('Нельзя удалить счет, к которому привязаны транзакции.', true);
                     return;
                 }
                 
@@ -1749,9 +1326,9 @@
                 const accountRef = ref(db, `users/${currentUserId}/accounts/${accountId}`);
                 await remove(accountRef);
                 
-                showToast(t('toast.accountDeleted'));
+                showToast('Счет успешно удален.');
                 
-            } catch (error) { console.error("Ошибка удаления счета:", error); showToast(`${t('toast.deleteAccountErrorGeneric')}: ${error}.`, true); }
+            } catch (error) { console.error("Ошибка удаления счета:", error); showToast(`Ошибка удаления счета: ${error}.`, true); }
         }
         
         async function handleDeleteLoan(loanId) {
@@ -1766,7 +1343,7 @@
                 const transSnapshot = await get(transQuery);
                 if (transSnapshot.exists()) {
                     // НЕЛЬЗЯ УДАЛЯТЬ
-                    showToast(t('toast.deleteLoanError'), true);
+                    showToast('Нельзя удалить кредит, по которому были платежи.', true);
                     return;
                 }
                 
@@ -1774,9 +1351,9 @@
                 const loanRef = ref(db, `users/${currentUserId}/loans/${loanId}`);
                 await remove(loanRef);
                 
-                showToast(t('toast.loanDeleted'));
+                showToast('Кредит успешно удален.');
                 
-            } catch (error) { console.error("Ошибка удаления кредита:", error); showToast(t('toast.deleteLoanErrorGeneric'), true); }
+            } catch (error) { console.error("Ошибка удаления кредита:", error); showToast('Ошибка удаления кредита.', true); }
         }
         
         // --- 7. Функции Auth (Вход/Регистрация/Выход) ---
@@ -1791,10 +1368,7 @@
                 // onAuthStateChanged сделает все остальное
             } catch (error) {
                 console.error("Ошибка входа:", error.code);
-                const errorKey = `auth.error.${error.code}`.replace(/[/.]/g, '-');
-                const message = t(errorKey) || t('auth.error.default');
-                authError.textContent = message;
-                authError.dataset.lastErrorKey = errorKey;
+                authError.textContent = getAuthErrorMessage(error.code);
             }
         }
         
@@ -1808,10 +1382,7 @@
                 // onAuthStateChanged сделает все остальное
             } catch (error) {
                 console.error("Ошибка регистрации:", error.code);
-                const errorKey = `auth.error.${error.code}`.replace(/[/.]/g, '-');
-                const message = t(errorKey) || t('auth.error.default');
-                authError.textContent = message;
-                authError.dataset.lastErrorKey = errorKey;
+                authError.textContent = getAuthErrorMessage(error.code);
             }
         }
         
@@ -1822,15 +1393,20 @@
                 toggleDrawer(false); // Закрываем drawer
             } catch (error) {
                 console.error("Ошибка выхода:", error);
-                showToast(t('toast.logoutError'), true);
+                showToast('Ошибка при выходе.', true);
             }
         }
         
         function getAuthErrorMessage(code) {
-            // Эта функция больше не используется, т.к. ошибки обрабатываются в handleLogin/handleRegister с помощью t()
-            // Оставим ее на всякий случай, но она не будет вызываться
-            const errorKey = `auth.error.${code}`.replace(/[/.]/g, '-');
-            return t(errorKey) || t('auth.error.default');
+            switch (code) {
+                case 'auth/invalid-email': return 'Неверный формат Email.';
+                case 'auth/user-not-found': return 'Пользователь не найден.';
+                case 'auth/wrong-password': return 'Неверный пароль.';
+                case 'auth/email-already-in-use': return 'Этот Email уже используется.';
+                case 'auth/weak-password': return 'Пароль слишком слабый (мин. 6 символов).';
+                case 'auth/invalid-credential': return 'Неверный Email или пароль.';
+                default: return 'Произошла ошибка. Попробуйте снова.';
+            }
         }
 
         // --- 8. Вспомогательные функции для UI (без изменений) ---
@@ -1838,14 +1414,14 @@
         // Открытие модалки транзакции (Доход/Расход)
         function openTransactionModal(type) {
             const isIncome = (type === 'income');
-            transactionModalTitle.textContent = isIncome ? t('forms.newIncome') : t('forms.newExpense');
-            submitTransactionBtn.textContent = isIncome ? t('forms.addIncomeButton') : t('forms.addExpenseButton');
+            transactionModalTitle.textContent = isIncome ? 'Новый Доход' : 'Новый Расход';
+            submitTransactionBtn.textContent = isIncome ? 'Добавить Доход' : 'Добавить Расход';
             submitTransactionBtn.className = `w-full text-white font-bold py-3 px-4 rounded-lg transition-all ${isIncome ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}`;
             document.getElementById('transaction-type').value = type;
             document.getElementById('category-container').classList.toggle('hidden', isIncome);
             loanPaymentContainer.classList.add('hidden');
             savingsTransferContainer.classList.add('hidden');
-            transactionAccountSelect.previousElementSibling.textContent = t('forms.account');
+            transactionAccountSelect.previousElementSibling.textContent = 'Счет';
             if (!isIncome) populateCategories();
             transactionForm.reset();
             toggleModal('transaction-modal', true);
@@ -1856,26 +1432,26 @@
             transactionCategory.innerHTML = '';
             if (currentBudgetModel === '50-30-20') {
                 transactionCategory.innerHTML = `
-                    <option value="needs-503020">${t('categories.model.50-30-20.needs')}</option>
-                    <option value="wants-503020">${t('categories.model.50-30-20.wants')}</option>
-                    <option value="savings-503020">${t('categories.model.50-30-20.savings')}</option>
-                    <option value="loan">${t('categories.loan')}</option>
-                    <option value="other">${t('categories.other')}</option>
+                    <option value="needs-503020">Нужды (50%)</option>
+                    <option value="wants-503020">Желания (30%)</option>
+                    <option value="savings-503020">Сбережения (20% - Перевод)</option>
+                    <option value="loan">Оплата кредита</option>
+                    <option value="other">Другое</option>
                 `;
             } else if (currentBudgetModel === '80-20') {
                 transactionCategory.innerHTML = `
-                    <option value="expenses-8020">${t('categories.model.80-20.expenses')}</option>
-                    <option value="savings-8020">${t('categories.model.80-20.savings')}</option>
-                    <option value="loan">${t('categories.loan')}</option>
-                    <option value="other">${t('categories.other')}</option>
+                    <option value="expenses-8020">Расходы (80%)</option>
+                    <option value="savings-8020">Сбережения (20% - Перевод)</option>
+                    <option value="loan">Оплата кредита</option>
+                    <option value="other">Другое</option>
                 `;
             } else {
                  transactionCategory.innerHTML = `
-                    <option value="needs">${t('categories.model.none.needs')}</option>
-                    <option value="wants">${t('categories.model.none.wants')}</option>
-                    <option value="savings">${t('categories.model.none.savings')}</option>
-                    <option value="loan">${t('categories.loan')}</option>
-                    <option value="other">${t('categories.other')}</option>
+                    <option value="needs">Нужды</option>
+                    <option value="wants">Желания</option>
+                    <option value="savings">Сбережения (Перевод)</option>
+                    <option value="loan">Оплата кредита</option>
+                    <option value="other">Другое</option>
                 `;
             }
             transactionCategory.dispatchEvent(new Event('change'));
@@ -1895,10 +1471,10 @@
             if (isSavings) {
                 populateSavingsSelect();
                 transactionSavingsSelect.onchange = handleSavingsSelectChange;
-                transactionAccountSelect.previousElementSibling.textContent = t('forms.accountFrom');
+                transactionAccountSelect.previousElementSibling.textContent = 'Счет (Откуда)';
             } else {
                 transactionSavingsSelect.onchange = null;
-                transactionAccountSelect.previousElementSibling.textContent = t('forms.account');
+                transactionAccountSelect.previousElementSibling.textContent = 'Счет';
             }
             if (category !== 'loan') resetTransactionFormPartial();
         }
@@ -1916,8 +1492,8 @@
             colorSwatches[0].click();
             accountTypeSelect.addEventListener('change', (e) => {
                 bankLogoContainer.classList.toggle('hidden', e.target.value !== 'bank');
-                if (e.target.value === 'cash') accountNameInput.value = t('accountTypes.cash');
-                else if (e.target.value === 'savings' || e.target.value === 'deposit') accountNameInput.value = t('accountTypes.defaultSavings');
+                if (e.target.value === 'cash') accountNameInput.value = 'Наличные';
+                else if (e.target.value === 'savings' || e.target.value === 'deposit') accountNameInput.value = 'Сберегательный счет';
             });
             accountTypeSelect.dispatchEvent(new Event('change'));
             bankLogoInputs.forEach(logo => {
@@ -1936,7 +1512,7 @@
         function populateAccountSelect() {
             transactionAccountSelect.innerHTML = '';
             if (allAccounts.length === 0) {
-                transactionAccountSelect.innerHTML = `<option value="">${t('forms.noAccountFirst')}</option>`;
+                transactionAccountSelect.innerHTML = '<option value="">Сначала добавьте счет</option>';
                 return;
             }
             allAccounts.forEach(acc => {
@@ -1952,10 +1528,10 @@
             transactionLoanSelect.innerHTML = '';
             const unpaidLoans = allLoans.filter(l => l.paidAmount < l.totalAmount);
             if (unpaidLoans.length === 0) {
-                transactionLoanSelect.innerHTML = `<option value="">${t('forms.noActiveLoans')}</option>`;
+                transactionLoanSelect.innerHTML = '<option value="">Нет активных кредитов</option>';
                 return;
             }
-            transactionLoanSelect.innerHTML = `<option value="">${t('forms.selectLoan')}</option>`;
+            transactionLoanSelect.innerHTML = '<option value="">Выберите кредит...</option>';
             unpaidLoans.forEach(loan => {
                 const option = document.createElement('option');
                 option.value = loan.id;
@@ -1969,10 +1545,10 @@
             transactionSavingsSelect.innerHTML = '';
             const savingsAccounts = allAccounts.filter(a => a.type === 'savings' || a.type === 'deposit');
             if (savingsAccounts.length === 0) {
-                transactionSavingsSelect.innerHTML = `<option value="">${t('forms.noSavingsAccounts')}</option>`;
+                transactionSavingsSelect.innerHTML = '<option value="">Нет сберегательных счетов</option>';
                 return;
             }
-            transactionSavingsSelect.innerHTML = `<option value="">${t('forms.selectAccount')}</option>`;
+            transactionSavingsSelect.innerHTML = '<option value="">Выберите счет...</option>';
             savingsAccounts.forEach(acc => {
                 const option = document.createElement('option');
                 option.value = acc.id;
@@ -2006,205 +1582,9 @@
              transactionAmountInput.value = '';
         }
 
-        // --- НОВЫЕ ФУНКЦИИ: Drag-n-Drop (Touch Handlers) ---
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let scrollInterval = null; // Для авто-скролла
-        let isDragging = false; // Флаг, что мы тащим, а не скроллим
-        let isScrolling = false; // Флаг, что мы скроллим, а не тащим
-
-        function handleTouchStart(e) {
-            const targetCard = e.target.closest('.slider-item');
-            if (!targetCard) return;
-            
-            draggedItem = targetCard;
-            originalIndex = allAccounts.findIndex(acc => acc.id === draggedItem.dataset.accountId);
-            
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            isDragging = false;
-            isScrolling = false;
-        }
-        
-        function handleTouchMove(e) {
-            if (!draggedItem || isScrolling) return;
-
-            const touchCurrentX = e.touches[0].clientX;
-            const touchCurrentY = e.touches[0].clientY;
-            const deltaX = touchCurrentX - touchStartX;
-            const deltaY = touchCurrentY - touchStartY;
-
-            if (!isDragging) {
-                // Мертвая зона: определяем, тащит пользователь или скроллит
-                if (Math.abs(deltaX) > Math.abs(deltaY) + 5) { // Тащим горизонтально
-                    isDragging = true;
-                    draggedItem.classList.add('dragging'); 
-                    accountsSlider.style.overflowX = 'hidden'; // Отключаем скролл слайдера
-                } else if (Math.abs(deltaY) > Math.abs(deltaX) + 5) { // Скроллим вертикально
-                    isScrolling = true;
-                    draggedItem = null; // Отпускаем
-                    return;
-                }
-            }
-            
-            if (isDragging) {
-                e.preventDefault(); // Предотвращаем скролл страницы
-                
-                // Логика перемещения (такая же, как в handleDragOver)
-                const afterElement = getDragAfterElement(accountsSlider, touchCurrentX);
-                if (afterElement == null) {
-                    accountsSlider.appendChild(draggedItem);
-                } else {
-                    accountsSlider.insertBefore(draggedItem, afterElement);
-                }
-                
-                // Авто-скролл
-                const sliderRect = accountsSlider.getBoundingClientRect();
-                const edgeThreshold = 50; 
-                if (touchCurrentX < sliderRect.left + edgeThreshold) {
-                    startAutoScroll(-10); // Влево
-                } else if (touchCurrentX > sliderRect.right - edgeThreshold) {
-                    startAutoScroll(10); // Вправо
-                } else {
-                    stopAutoScroll();
-                }
-            }
-        }
-        
-        function handleTouchEnd(e) {
-            if (!draggedItem) return;
-            
-            stopAutoScroll();
-            accountsSlider.style.overflowX = 'auto'; // Возвращаем скролл
-            
-            if (isDragging) {
-                draggedItem.classList.remove('dragging');
-                saveAccountOrder(); // Сохраняем
-            }
-            
-            draggedItem = null;
-            originalIndex = -1;
-            isDragging = false;
-            isScrolling = false;
-        }
-        
-        // Вспомогательные функции для авто-скролла
-        function startAutoScroll(step) {
-            if (scrollInterval) return;
-            scrollInterval = setInterval(() => {
-                accountsSlider.scrollLeft += step;
-            }, 30);
-        }
-
-        function stopAutoScroll() {
-            clearInterval(scrollInterval);
-            scrollInterval = null;
-        }
-        // --- КОНЕЦ НОВЫХ ФУНКЦИЙ ---
-
-
-        // --- НОВЫЕ ФУНКЦИИ: Drag-n-Drop ---
-        let draggedItem = null;
-        let originalIndex = -1;
-
-        function handleDragStart(e) {
-            draggedItem = e.target.closest('.slider-item');
-            if (!draggedItem) return;
-            
-            originalIndex = allAccounts.findIndex(acc => acc.id === draggedItem.dataset.accountId);
-            
-            // Даем браузеру время "схватить" элемент перед тем, как мы его стилизуем
-            setTimeout(() => {
-                if (draggedItem) draggedItem.classList.add('dragging');
-            }, 0);
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            const slider = accountsSlider;
-            const afterElement = getDragAfterElement(slider, e.clientX);
-            if (!draggedItem) return;
-
-            if (afterElement == null) {
-                slider.appendChild(draggedItem);
-            } else {
-                slider.insertBefore(draggedItem, afterElement);
-            }
-        }
-        
-        function handleDragLeave(e) {
-            // (Не используется, но можно добавить для стилизации)
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            if (!draggedItem) return;
-            
-            draggedItem.classList.remove('dragging');
-            
-            // Получаем новый порядок из DOM
-            const newOrderedIds = [...accountsSlider.querySelectorAll('.slider-item')].map(item => item.dataset.accountId);
-            
-            // Обновляем локальный массив allAccounts
-            allAccounts.sort((a, b) => newOrderedIds.indexOf(a.id) - newOrderedIds.indexOf(b.id));
-
-            // Сохраняем новый порядок в Firebase
-            saveAccountOrder();
-            
-            draggedItem = null;
-            originalIndex = -1;
-        }
-        
-        function handleDragEnd(e) {
-             if (draggedItem) {
-                draggedItem.classList.remove('dragging');
-            }
-             // Если drop не сработал (напр., отпустили вне зоны), возвращаем в исходное состояние
-            if (originalIndex !== -1) {
-                renderAccounts(); // Просто перерисовываем
-            }
-            draggedItem = null;
-            originalIndex = -1;
-        }
-
-        function getDragAfterElement(container, x) {
-            const draggableElements = [...container.querySelectorAll('.slider-item:not(.dragging)')];
-
-            return draggableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = x - box.left - box.width / 2;
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-        }
-        
-        async function saveAccountOrder() {
-            if (!currentUserId) return;
-            
-            const updates = {};
-            allAccounts.forEach((acc, index) => {
-                updates[`users/${currentUserId}/accounts/${acc.id}/order`] = index;
-            });
-            
-            try {
-                await update(ref(db), updates);
-                showToast(t('toast.orderSaved'));
-            } catch (error) {
-                console.error("Ошибка сохранения порядка:", error);
-                showToast(t('toast.orderSaveError'), true);
-                // Откатываем, если ошибка
-                allAccounts.sort((a, b) => (a.order || 0) - (b.order || 0));
-                renderAccounts();
-            }
-        }
-
     </script>
 
 </body>
 </html>
-
 
 
