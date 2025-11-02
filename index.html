@@ -551,7 +551,10 @@
                 <hr class="my-6 dark:border-gray-600">
                 
                 <div class="text-left text-xs text-gray-400">
-                    Вы вошли как: <br> <strong id="user-email-display" class="font-mono text-sm break-words">...</strong>
+                    Вы вошли как: <br> <strong id="user-email-display" class="font-mono text-sm break-words">...</strong> 
+                </div>
+                   <div class="text-left text-xs text-gray-400">
+                    User ID: <br> <strong id="user-id-display" class="font-mono text-sm break-words">...</strong> 
                 </div>
             </div>
             
@@ -580,7 +583,8 @@
                 <button id="menu-toggle" class="text-2xl text-gray-700 dark:text-gray-300">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 id="app-title-header" class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">MyFin</h1>
+                <!-- <h1 id="app-title-header" class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">MyFin</h1> -->
+                <img id="app-title-header"  src="assets/logo.svg",  width="150"/>
                 <!-- ИЗМЕНЕНИЕ: Заглушка заменена на переключатель языка -->
                 <div class="flex gap-1 sm:gap-2">
                     <button id="lang-toggle-ru" class="font-semibold p-2 rounded-lg text-sm w-10 text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-gray-700">RU</button>
@@ -868,6 +872,7 @@
                 closeHistoryModal: null,
                 allHistoryContent: null,
                 userEmailDisplay: null,
+                userIdDisplay: null,
                 transactionTypeInput: null,
                 
                 // НОВЫЕ ЭЛЕМЕНТЫ (ДОЛГИ)
@@ -1039,6 +1044,7 @@
                 this.elements.closeHistoryModal = document.getElementById('close-history-modal');
                 this.elements.allHistoryContent = document.getElementById('all-history-content');
                 this.elements.userEmailDisplay = document.getElementById('user-email-display');
+                this.elements.userIdDisplay = document.getElementById('user-id-display');
                 this.elements.transactionTypeInput = document.getElementById('transaction-type');
 
                 // НОВЫЕ ЭЛЕМЕНТЫ (ДОЛГИ)
@@ -1212,6 +1218,8 @@
                     if (user) {
                         this.state.currentUserId = user.uid;
                         this.elements.userEmailDisplay.textContent = user.email;
+                        this.elements.userIdDisplay.textContent = user.uid;
+                        
                         
                         // Логика отображения
                         this.elements.authContainer.classList.add('hidden');
