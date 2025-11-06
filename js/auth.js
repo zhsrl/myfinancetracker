@@ -6,6 +6,8 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
+import { DB } from './db.js';
+import { App } from './app.js';
 
 
 export const Auth = {
@@ -29,7 +31,9 @@ export const Auth = {
                 // Логика отображения
                 this.elements.authContainer.classList.remove('hidden');
                 this.elements.mainAppContainer.classList.add('hidden');
-                this.clearAllLocalData();
+                
+                DB.clearAllLocalData();
+                
             }
             
             // ИЗМЕНЕНИЕ: Вызываем applyLanguage() здесь,
@@ -50,7 +54,7 @@ export const Auth = {
             await signInWithEmailAndPassword(this.firebase.auth, email, password);
         } catch (error) {
             console.error("Ошибка входа:", error.code);
-            this.elements.authError.textContent = this.getAuthErrorMessage(error.code);
+            this.elements.authError.textContent = Auth.getAuthErrorMessage(error.code);
         }
     },
     
@@ -63,7 +67,7 @@ export const Auth = {
             await createUserWithEmailAndPassword(this.firebase.auth, email, password);
         } catch (error) {
             console.error("Ошибка регистрации:", error.code);
-            this.elements.authError.textContent = this.getAuthErrorMessage(error.code);
+            this.elements.authError.textContent = getAuthErrorMessage(error.code);
         }
     },
     
@@ -79,13 +83,13 @@ export const Auth = {
     
     getAuthErrorMessage(code) {
         switch (code) {
-            case 'auth/invalid-email': return this.getString('auth.error.invalidEmail');
-            case 'auth/user-not-found': return this.getString('auth.error.userNotFound');
-            case 'auth/wrong-password': return this.getString('auth.error.wrongPassword');
-            case 'auth/email-already-in-use': return this.getString('auth.error.emailInUse');
-            case 'auth/weak-password': return this.getString('auth.error.weakPassword');
-            case 'auth/invalid-credential': return this.getString('auth.error.invalidCredential');
-            default: return this.getString('auth.error.default');
+            case 'auth/invalid-email': return App.getString('auth.error.invalidEmail');
+            case 'auth/user-not-found': return App.getString('auth.error.userNotFound');
+            case 'auth/wrong-password': return App.getString('auth.error.wrongPassword');
+            case 'auth/email-already-in-use':  App.getString('auth.error.emailInUse');
+            case 'auth/weak-password': return App.getString('auth.error.weakPassword');
+            case 'auth/invalid-credential': return App.getString('auth.error.invalidCredential');
+            default: return App.getString('auth.error.default');
         }
     },
 
